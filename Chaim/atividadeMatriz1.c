@@ -19,16 +19,18 @@ int main ()
 {
     char **matriz = (char**) malloc(sizeof(char*)*3);
 
-    matriz[0] = (char*) malloc(sizeof(char)*7);
-    matriz[1] = (char*) malloc(sizeof(char)*5);
-    matriz[2] = (char*) malloc(sizeof(char)*6);
+    //Porque se eu aloco uma quantidade x de caracteres, e no scanf eu passo desse x o programa funciona normal ????
 
-    matriz[0] = "Tackle";
-    matriz[1] = "Ruck";
-    matriz[2] = "Scrum";
+    matriz[0] = (char*) malloc(sizeof(char)*2);
+    matriz[1] = (char*) malloc(sizeof(char)*2);
+    matriz[2] = (char*) malloc(sizeof(char)*2);
 
-    printf("Minha funcao: %i\n",contaCaracteres(matriz,3));
+    scanf ("%s", matriz[0]);
+    scanf ("%s", matriz[1]);
+    scanf ("%s", matriz[2]);
+
+    printf("- Minha funcao - A quantidade de caracteres somados de todas as strings são: %i\n",contaCaracteres(matriz,3));
     int tamanhoTotal = strlen(matriz[0]) + strlen(matriz[1]) + strlen(matriz[2]);
-    printf("Strlen : %i\n", tamanhoTotal);
+    printf("- Strlen - A quantidade de caracteres somados de todas as strings são: %i\n", tamanhoTotal);
     return 0;
 }
