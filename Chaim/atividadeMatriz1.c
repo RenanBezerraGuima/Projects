@@ -30,6 +30,6 @@ int main ()
     printf("Minha funcao: %i\n",contaCaracteres(matriz,3));
     int tamanhoTotal = strlen(matriz[0]) + strlen(matriz[1]) + strlen(matriz[2]);
     printf("Strlen : %i\n", tamanhoTotal);
-    printf("Esse foi mais dos exercicios.\n");
+    printf("Esse foi mais um dos exercicios.\n");
     return 0;
 }
