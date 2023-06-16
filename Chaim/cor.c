@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int cor (int identificador){
+void cor (int identificador){
     
     switch (identificador)
     {
@@ -24,13 +24,12 @@ int cor (int identificador){
         printf("identificador invalido\n");
     
     }
-
 }
 
 void main (){
     int i;
 
+    printf("Insira um numero de 1 a 4: ");
     scanf("%i", &i);
     cor (i);
-
 }
