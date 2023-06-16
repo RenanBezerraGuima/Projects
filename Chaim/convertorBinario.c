@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <math.h>
 
 int main () {
     int quociente;
-
+    
     int num = 484;
      quociente = num / 2; 
     int resto1 = num % 2;
