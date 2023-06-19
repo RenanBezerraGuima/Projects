@@ -33,17 +33,14 @@ int verificaAnoBissexto(int a)
 
 int verificaDataValida(int d, int m, int a) 
 {
+    //Verifica se o dia é menor do que 1 OU Vefica se o dia colocado é maior do que a quantidade de dias no mês.
+    if((d < 1) || (d > diasNomes[m])) return FALSE;
+
     //Verifica se o mês é maior do que 12 OU menor do que 1.
     if(m > 12 || m < 1) return FALSE;
 
-    //Verifica se o dia é menor do que 1.
-    if(d < 1) return FALSE;
-
     //Verifica se o ano é menor do que zero.
     if(a < 0) return FALSE;
-
-    //Vefica se o dia colocado é maior do que a quantidade de dias no mês.
-    if ( d > diasNoMes[m] ) return FALSE;
 
     return TRUE;
 }
@@ -79,35 +76,36 @@ int proximosEncontros(int d,int m, int a)
       if (m == 12 && d > diasNoMes[12]) break;
      }
     //Imprime a data da reunião somente se os dias são menores do que o mês.
-    if (d < diasNoMes[m]) printf("%i/%i/%i\n", d, m, a);
+    if (d <= diasNoMes[m]) printf("%i/%i/%i\n", d, m, a);
    }
 
   return 0;
 }
 
 int main() 
+{
+  int dia, mes, ano;
+
+  //Recebe o dia, mês e ano do usuário.
+  printf("Entre com a data de inicio do ano letivo:\n");
+  printf("Entre com o dia: ");
+  scanf("%d", &dia);
+  printf("Entre com o mes: ");
+  scanf("%d", &mes);
+  printf("Entre com o ano: ");
+  scanf("%d", &ano);
+
+  verificaAnoBissexto(ano);
+  //Verifica se as datas estão válidas, se não estevirem válidas retorna FALSE.
+  if(verificaDataValida(dia, mes, ano) == FALSE)
   {
-    int dia, mes, ano;
-
-    //Recebe o dia, mês e ano do usuário.
-    printf("Entre com a data de inicio do ano letivo:\n");
-    printf("Entre com o dia: ");
-    scanf("%d", &dia);
-    printf("Entre com o mes: ");
-    scanf("%d", &mes);
-    printf("Entre com o ano: ");
-    scanf("%d", &ano);
-
-    verificaAnoBissexto(ano);
-    //Verifica se as datas estão válidas, se não estevirem válidas retorna FALSE.
-    if(verificaDataValida(dia, mes, ano) == FALSE)
-      {
-        printf("Dados incorretos\n");
-        exit(1); // Esta função aborta a execução do programa.
-      }
-
-    //Após ter saber se é um ano bissexto e se as datas estão válidas imprime as datas.
-    printf("Proximos dias de encontro de todos os clubes:\n");
-    proximosEncontros(dia, mes, ano);
-    return 0;
+    printf("Dados incorretos\n");
+    exit(1); // Esta função aborta a execução do programa.
   }
+
+  printf("Data de inicio do ano letivo: %i/%i/%i\n",dia,mes,ano);
+  //Após ter saber se é um ano bissexto e se as datas estão válidas imprime as datas.
+  printf("Proximos dias de encontro de todos os clubes:\n");
+  proximosEncontros(dia, mes, ano);
+  return 0;
+}
