@@ -34,7 +34,7 @@ int verificaAnoBissexto(int a)
 int verificaDataValida(int d, int m, int a) 
 {
     //Verifica se o dia é menor do que 1 OU Vefica se o dia colocado é maior do que a quantidade de dias no mês.
-    if((d < 1) || (d > diasNomes[m])) return FALSE;
+    if((d < 1) || (d > diasNoMes[m])) return FALSE;
 
     //Verifica se o mês é maior do que 12 OU menor do que 1.
     if(m > 12 || m < 1) return FALSE;
