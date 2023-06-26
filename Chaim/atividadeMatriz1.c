@@ -4,22 +4,21 @@
 
 int contaCaracteres(char** palavras, int n)
 {
-    int contador = 0;
+    int total = 0;
+
     for (int i=0; i<n ; i++)
     {
         for ( int j = 0; palavras[i][j] != '\0'; j++)
         {
-            contador++;
+            total++;
         }
     }
-    return contador;
+    return total;
 }
 
-int main ()
-{
-    char **matriz = (char**) malloc(sizeof(char*)*3);
-
+int main() {
     //Porque se eu aloco uma quantidade x de caracteres, e no scanf eu passo desse x o programa funciona normal ????
+    char** matriz = (char**) malloc(sizeof(char*)*3);
 
     matriz[0] = (char*) malloc(sizeof(char)*2);
     matriz[1] = (char*) malloc(sizeof(char)*2);

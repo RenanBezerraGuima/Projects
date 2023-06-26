@@ -1,7 +1,9 @@
 #include <stdio.h>
 
-int main () {
+int main () 
+{
     int mes;
+    printf("Insira o numero do mes: ");
     scanf("%i", &mes);
 
     switch (mes)
