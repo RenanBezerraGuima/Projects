@@ -54,16 +54,31 @@ void lenometime(char * s) {
 
 // Ordena por Pontos
 
-void ordenaPontos(time * timescampeonato, int notimes)
+void ordenaPontosEsaldo(time * timescampeonato, int notimes)
 {
   // Adicione seu código para ordenar em ordem decrescente de pontos ganhos
-}
-
-// Ordena por saldo de gols
-
-void ordenaSaldoGols(time * timescampeonato, int notimes)
-{
-  // Adicione seu código para ordenar em ordem decrescente de saldo de gols
+  time temp;
+   for (int i = 0; i < notimes - 1; i++)
+   {
+      for (int j = 0; j < notimes - i - 1; j++)
+      {
+         if (timescampeonato[j].PontosGanhos < timescampeonato[j + 1].PontosGanhos)
+         {
+            temp = timescampeonato[j];
+            timescampeonato[j] = timescampeonato[j + 1];
+            timescampeonato[j + 1] = temp;
+         }
+         else if (timescampeonato[j].PontosGanhos == timescampeonato[j + 1].PontosGanhos)
+         {
+            if (timescampeonato[j].SaldoDeGols < timescampeonato[j + 1].SaldoDeGols)
+            {
+               temp = timescampeonato[j];
+               timescampeonato[j] = timescampeonato[j + 1];
+               timescampeonato[j + 1] = temp;
+            }
+         }
+      }
+   }
 }
 
 // Encontra se o time já está no arranjo de times do campeonato
@@ -122,12 +137,15 @@ int crialistatimes(time * timescampeonato, jogo * dadosjogos, int numerojogos) {
 void computadadostimes(time * timescampeonato,int notimes,jogo * dadosjogos,int numerojogos) {
   // Preenche os campos dos elementos do arranjo timescampeonato: Vitorias,
   // GolsSofridos, GolsMarcados, Golsaverage, SaldoDeGols, PontosGanhos.
-  // Adicione seu código
 
   for (int j=0;j<notimes;j++)
   {
     timescampeonato[j].GolsMarcados = 0;
     timescampeonato[j].GolsSofridos = 0;
+    timescampeonato[j].Vitorias = 0;
+    timescampeonato[j].PontosGanhos = 0;
+    timescampeonato[j].Empates = 0;
+    timescampeonato[j].Derrotas = 0;
     //Comparar com os times locais e adiciona Vitorias, Derrotas e Empates, GolsMarcados e Sofridos
     for(int i=0;i<numerojogos;i++)
     {
@@ -163,15 +181,21 @@ void computadadostimes(time * timescampeonato,int notimes,jogo * dadosjogos,int 
     timescampeonato[j].SaldoDeGols = (timescampeonato[j].GolsMarcados - timescampeonato[j].GolsSofridos);
 
     //Calculo PontosGanhos
-    timescampeonato[j].PontosGanhos = (timescampeonato[j].Vitorias * 3 + timescampeonato[j].Empates);
+    timescampeonato[j].PontosGanhos = (timescampeonato[j].Vitorias*3 + timescampeonato[j].Empates);
   }
 }
 
 // Imprime classificação
 
-void imprimeclassificacao(time * timescampeonato,int notimes){
- // Adicione seu código
-
+void imprimeclassificacao(time * timescampeonato,int notimes){ 
+  printf("Posicao,Nome,Pontos Ganhos,Vitorias,Empates,Derrotas,Saldo de Gols,Gol Average\n");
+  for(int i=0;i<notimes;i++)
+   {
+    printf("%i,%s,",i+1,timescampeonato[i].nome);
+    printf("%i,%i,%i,",timescampeonato[i].PontosGanhos,timescampeonato[i].Vitorias,timescampeonato[i].Empates);
+    printf("%i,",timescampeonato[i].Derrotas);
+    printf("%i,%.3f\n",timescampeonato[i].SaldoDeGols,timescampeonato[i].GolAverage);
+   }
 }
 
 // Salva os dados da classificação dos tipos em arquivo no disco
@@ -231,7 +255,7 @@ int main() {
   //   printf("Saldo de gols: %d\n",times[i].SaldoDeGols);
   //   printf("Gols average: %2.3f\n",times[i].GolAverage);
   // }
-
+  ordenaPontosEsaldo(times,notimes);
   imprimeclassificacao(times,notimes);
 
   // Opcional
