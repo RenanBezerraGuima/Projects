@@ -158,8 +158,8 @@ void computadadostimes(time * timescampeonato,int notimes,jogo * dadosjogos,int 
         timescampeonato[j].GolsMarcados += dadosjogos[i].golslocal;
         timescampeonato[j].GolsSofridos += dadosjogos[i].golsvisitante;
         if (dadosjogos[i].golslocal > dadosjogos[i].golsvisitante) timescampeonato[j].Vitorias++;
-        if (dadosjogos[i].golslocal < dadosjogos[i].golsvisitante) timescampeonato[j].Derrotas++;
-        if (dadosjogos[i].golslocal == dadosjogos[i].golsvisitante) timescampeonato[j].Empates++;
+        else if (dadosjogos[i].golslocal < dadosjogos[i].golsvisitante) timescampeonato[j].Derrotas++;
+        else timescampeonato[j].Empates++;
       }
     }
 
@@ -171,8 +171,8 @@ void computadadostimes(time * timescampeonato,int notimes,jogo * dadosjogos,int 
         timescampeonato[j].GolsMarcados += dadosjogos[i].golsvisitante;
         timescampeonato[j].GolsSofridos += dadosjogos[i].golslocal;
         if (dadosjogos[i].golsvisitante > dadosjogos[i].golslocal) timescampeonato[j].Vitorias++;
-        if (dadosjogos[i].golsvisitante < dadosjogos[i].golslocal) timescampeonato[j].Derrotas++;
-        if (dadosjogos[i].golsvisitante == dadosjogos[i].golslocal) timescampeonato[j].Empates++;
+        else if (dadosjogos[i].golsvisitante < dadosjogos[i].golslocal) timescampeonato[j].Derrotas++;
+        else timescampeonato[j].Empates++;
       }
     }
 
@@ -247,6 +247,5 @@ int main() {
 
   imprimeclassificacao(times,notimes);
 
-  // Opcional Feito 
   salvaclassificacao(times,notimes,"campeonatoIP.dat");
 }
