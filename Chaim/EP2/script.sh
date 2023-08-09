@@ -1,6 +1,6 @@
 #!/bin/bash
 
-programa="./14605640"
+programa="./14605640.exe"
 pastaEntrada="./testesEntrada"
 pastaSaida="./testesSaida"
 
