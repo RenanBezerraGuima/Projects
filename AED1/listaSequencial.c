@@ -17,14 +17,15 @@ void inicializa(listaSeq* l){
 }
 
 void exibir(listaSeq* l){
-    for (int i = 0; i < l->numElementos; i++){
+    for (int i = 0; i < l->numElementos; i++)
+    {
         printf("%i ", l->a[i].chave);
     }
     printf("\n");
 }
 
 bool anexar(listaSeq* l, int ch){
-    if (l->numElementos == MAX) return false;
+    if (l->numElementos == MAX) return false; //lista cheia
 
     l->a[l->numElementos].chave = ch;
     l->numElementos++;
@@ -58,17 +59,19 @@ listaSeq lista;
 inicializa(&lista);
 
 for (int i = 0; i < 10; i++) {
- anexar(&lista, i); 
+ anexar(&lista, i+1); 
 }
 
-if(buscaSeq(&lista, 7) == -1) printf("Nao tem\n");
-else printf("A posicao eh %i\n", buscaSeq(&lista, 7));
-
 exibir(&lista);
+printf("A lista tem %i elementos\n", lista.numElementos);
+
+if(buscaSeq(&lista, 15) == -1) printf("Nao tem\n");
+else printf("A posicao eh %i\n", buscaSeq(&lista, 7));
 
 excluir(&lista, 4);
 
 exibir(&lista);
+printf("A lista tem %i elementos\n", lista.numElementos);
 
 return 0;
 }
