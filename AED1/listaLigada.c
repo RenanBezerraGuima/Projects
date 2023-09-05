@@ -114,12 +114,46 @@ bool inserirElemListaEncOrd(int ch, LISTA* l) {
 }
 
 bool moverParaFrente(LISTA *l, int i){
+    if ((i<0) || (i>MAX-1)) return false;
     int ch=l->A[i].chave;
-    excluirElemListaEnc(ch,l);
-    int novo = obterNo(l);
+    int ant;
+    buscaSeqOrd(ch, *l, &ant);
+    if(ant == -1) return true;
+    l->A[ant].prox = l->A[i].prox;
+    l->A[i].prox = l->dispo;
+    l->dispo = i;
+    int novo = l->dispo;
     l->A[novo].chave = ch;
     l->A[novo].prox = l->inicio;
     l->inicio = novo;
+    return true;
+}
+
+bool moverParaFinal(LISTA *l, int ch){
+    int ant, antA, atual, ultimo;
+    int i = l->inicio;
+    ant = -1;
+    atual = -1;
+    antA = -1;
+    while (i != -1) 
+    {
+        if(l->A[i].chave == ch)
+        {
+            atual = i;
+            antA = ant;
+        } 
+        if(l->A[i].prox == -1) ultimo = i;
+        ant = i;
+        i= l->A[i].prox;
+    }
+    if (atual == -1) return false; //Não achou a chave
+    if (l->A[atual].prox == -1) return true;
+    if (antA == -1)  l->inicio = l->A[atual].prox; //Se o elemento buscado for o primeiro
+    else l->A[antA].prox = l->A[atual].prox;
+
+    l->A[ultimo].prox = atual;
+    l->A[atual].prox = -1;
+
     return true;
 }
 
@@ -143,6 +177,10 @@ int main (){
     int n6 = buscaSeqOrd(6,lista,&ant);
 
     moverParaFrente(&lista, n6);
+
+    exibirLista(&lista);
+
+    moverParaFinal(&lista, 7);
 
     exibirLista(&lista);
 
