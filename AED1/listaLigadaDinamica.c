@@ -4,12 +4,12 @@
 
 typedef struct estrutura {
     int chave;
-
+    //infos adicionais
     struct estrutura* prox;
-} no;
+} NO;
 
 typedef struct {
-    no* inicio;
+    NO* inicio;
 }lista;
 
 void inicializa(lista* l){
@@ -17,7 +17,7 @@ void inicializa(lista* l){
 }
 
 void exibir (lista* l){
-    no* p = l->inicio;
+    NO* p = l->inicio;
     while (p) 
     {
         printf("%i ", p->chave);
@@ -26,35 +26,50 @@ void exibir (lista* l){
     printf("\n");
 }
 
-bool excluirPrimeiro (lista* l){
-    no* inicio = l->inicio;
-    if (inicio == NULL) return false;
-    else 
-    {
-        no* p = inicio->prox;
-        free(inicio);
-        l->inicio = p;
-    } 
+NO* busca(lista* l, int ch, NO* *ant){
+    *ant = NULL;
+    NO* p = l->inicio;
+    while(p){
+        if (p->chave == ch) return p;
+        else if (p->chave > ch) return NULL;
+        *ant = p;
+        p = p->prox;
+    }
+    return NULL;
+}
+
+bool excluir (lista* l, int ch) {
+    NO* ant;
+    NO* atual = busca (l, ch, &ant);
+
+    if(!atual) return false; //Se não tiver essa chave buscada
+    else if (ant) ant->prox = atual->prox; //Se o elemento estver no meio
+    else l->inicio = atual->prox;   //Se o elemento for no inicio
+    free(atual);
+
     return true;
 }
 
-bool anexarlistaVazia (lista* l, int ch){
-    no* novo = (no*) malloc (sizeof(no));
+bool inserir(lista* l, int ch){
+    NO* ant;
+    NO* atual = busca(l, ch, &ant);
+    if (atual) return false; //Elemento já existe
+    NO* novo = (NO*) malloc(sizeof(NO));
     novo->chave = ch;
-    l->inicio = novo;
-    novo->prox = NULL;
-
+    if(ant){ //Elemento no meio
+        novo->prox = ant->prox;
+        ant->prox = novo;        
+    } else {//Elemento no comço ou lista vazia
+        novo->prox = l->inicio;
+        l->inicio = novo;
+    }
     return true;
 }
+
+
 
 int main () {
     lista l;
-    inicializa(&l);
-    anexarlistaVazia(&l, 15);
-    exibir(&l);
-
-    excluirPrimeiro(&l);
-    exibir(&l);
     
     return 0;
 }
