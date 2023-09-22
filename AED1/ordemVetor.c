@@ -7,7 +7,6 @@
     //9 valor único 
 
 int ordem (int v[], int n) {
-
     int crescente = 0;
     int decrescente = 0;
 
@@ -21,11 +20,9 @@ int ordem (int v[], int n) {
     else if (crescente == 1 && decrescente == 1) return 0;
     else if (crescente == 1) return 1;
     else if (decrescente == 1) return -1;
-    
 }
 
 int main () {
-
     printf("Este programa imprime qual a ordem de um dado vetor de 5 elementos\n");
     printf("\tEle retorna: \n\t 1 para crescente \n\t -1 para decrescente \n\t 0 para sem ordem \n\t 9 para um valor unico.\n");
 
