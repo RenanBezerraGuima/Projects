@@ -99,109 +99,53 @@ bool inserir2ElementosCompostos(lista* l1, lista* l2, int ch1, int ch2){
     return true;
 }
 
-typedef struct conjunto {
-    NO* elementoConjunto;
-    struct conjunto* proximo;
-}Conjunto;
-
-typedef struct {
-    Conjunto* inicio;
-}listaConjunto;
-
-void inicializaConjunto (listaConjunto* l){
-    l->inicio = NULL;
-}
-
-void adicionarAoConjunto(listaConjunto* conjunto, NO* elemento) {
-    Conjunto* novo = (Conjunto*)malloc(sizeof(Conjunto));
-    novo->elementoConjunto = elemento;
-    novo->proximo = NULL;
-    if (conjunto->inicio == NULL) conjunto->inicio = novo;
-    else 
-    {
-        Conjunto* p = conjunto->inicio;
-        while (p->proximo)
-        {
-            p = p->proximo;
-        }
-        p->proximo = novo;
-    }
-}
-
-void exibirConjunto(listaConjunto* c){
-    Conjunto* p = c->inicio;
-    while (p) 
-    {
-        printf("%i ", p->elementoConjunto->chave);
-        p = p->proximo;
-    }
-    printf("\n");
-}
-
-//Função Funciona
-int buscaConjunto(listaConjunto* c, NO* elemento, NO* *ant, Conjunto* *antConjunto){
-    Conjunto* p = c->inicio;
-    *ant = NULL;
-    *antConjunto = NULL;
-
-    while (p){
-        if(elemento == p->elementoConjunto) return 1; //O mesmo elemento
-        else if (*antConjunto == NULL) *antConjunto = c->inicio;
-        else *antConjunto = p;
-        *ant = p->elementoConjunto;
-        p = p->proximo;
-    }
-    return 0;
-}
-
+//(*p1) e (*p2) são ponteiros para inicio das listas 1 e 2 respectivamente
 void removerCompartilhados(NO* *p1, NO* *p2) {
-    listaConjunto c;
-    inicializaConjunto(&c);
-
-    NO* ponteiro1 = (*p1);//Inicio lista1
-
-    while (ponteiro1){
-        adicionarAoConjunto(&c, ponteiro1);
-        ponteiro1 = ponteiro1->prox;
-    } 
-
-    NO* ponteiro2 = (*p2);//Inicio lista2
+    NO* pl1 = (*p1);
+    NO* antl1 = NULL;
+    NO* pl2 = (*p2);
     NO* antl2 = NULL;
-    NO* antLista = NULL;
-    Conjunto* antConjunto = NULL;
 
-    while (ponteiro2) 
+    // Percorre cada elemento da lista1 comparando o endereço com a lista2 e removendo se for igual
+    while (pl1) // Percorre a lista1
     {
-        NO* temp = ponteiro2->prox;
-        if (buscaConjunto(&c, ponteiro2, &antLista, &antConjunto))
+        pl2 = (*p2);
+        while (pl2) // Percorre a lista2
         {
-            if (!antLista) 
+            if (pl1 == pl2) //Se tiverem o mesmo endereço de memoria
             {
-                (*p2) = ponteiro2->prox;
-                c.inicio = c.inicio->proximo;
-                (*p1) = (*p1)->prox;
+                if (antl1) antl1->prox = pl1->prox; // Se não for o primeiro elemento da lista1
+                else (*p1) = pl1->prox; 
+                if (antl2) antl2->prox = pl2->prox; // Se não for o primeiro elemento da lista2
+                else (*p2) = pl2->prox;
+                free(pl1);
+                pl1 = (*p1);
+                break;
             }
-            else 
+            else
             {
-                antLista->prox = antLista->prox->prox; // Tira de l1
-                antConjunto->proximo = antConjunto->proximo->proximo; // Tira do Conjunto
-                if (antl2) {
-                    antl2->prox = antl2->prox->prox;// Tira de l2
-                }
+                antl2 = pl2;
+                pl2 = pl2->prox;
             }
-            free(ponteiro2);
         }
-        ponteiro2 = temp;
-        antl2 = ponteiro2;
+        antl1 = pl1;
+        pl1 = pl1->prox;
     }
-    
-    Conjunto* p = c.inicio;
-    while (p)
+
+    pl1 = (*p1);
+    pl2 = (*p2);
+
+    while (pl1->prox)
     {
-        Conjunto* temp = p;
-        p = p->proximo;
-        free(temp);
+    pl1 = pl1->prox;
     }
+    pl1->prox = (*p1);
+    
+    while (pl2->prox)
+    {
+      pl2 = pl2->prox;
+    }
+    pl2->prox = (*p2);
 }
 
 int main () {
@@ -220,14 +164,11 @@ int main () {
     inserir(&l2,30);
     exibir(&l2);
 
-    inserir2ElementosCompostos(&l1, &l2, 99, 99);
-    exibir(&l1);
-    exibir(&l2);
-    
-    removerCompartilhados(&(l1.inicio), &(l2.inicio));
-
+    // inserir2ElementosCompostos(&l1, &l2, 99, 99);
     // exibir(&l1);
     // exibir(&l2);
+
+    removerCompartilhados(&(l1.inicio), &(l2.inicio));
 
     return 0;
 }
