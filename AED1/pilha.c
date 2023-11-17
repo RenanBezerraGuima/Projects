@@ -105,6 +105,7 @@ NO* copiaInvertida(NO* p){
     lista lresp;
     inicializa(&lresp);
     inicializarPdinam(&aux);
+    
     while (p)
     {
         push(p->chave, &aux);
