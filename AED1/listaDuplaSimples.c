@@ -18,29 +18,30 @@ void inicializarLista(LISTADUPLA* l) {
 }
 
 NO* listaNumerada(int n) {
-	if (n == 0) return (NULL);
-	NO* inicio = (NO*) malloc(sizeof(NO));
-	inicio->ant = NULL;
-	inicio->prox = NULL;
-	inicio->chave = 1; 
-		
-	if (n > 1) 
+	NO* inicio = NULL;
+    NO* anterior = NULL;
+	int i = 1;
+
+	while (i <= n) 
 	{
-		int i = 2;
-		NO* p = inicio;
-		while(i <= n)
-		{
-			NO* novo = (NO*) malloc(sizeof(NO));
-			novo->chave = i;
-			novo->ant = p;
-			novo->prox = NULL;
-			p->prox = novo;
-			p = p->prox;
-			i++;
-		}
-        return (inicio);
+        NO* novo = (NO*) malloc(sizeof(NO));
+        novo->chave = i;
+        if (i == 1) 
+        {
+            inicio = novo;
+            novo->ant = NULL;
+        }
+        else 
+        {
+            novo->ant = anterior;
+            novo->ant->prox = novo;
+        }
+        novo->prox = NULL;
+        i++;
+        anterior = novo;
 	}
-	else return (inicio);
+
+	return (inicio);
 }
 
 void exibir (LISTADUPLA* l){
@@ -85,22 +86,16 @@ NO* busca(LISTADUPLA* l, int ch){
 //Dada um ponteiro p garantidamente válido, 
 //mover o elemento p para o fim da lista.
 void moverParaFim(LISTADUPLA* l, NO* p){
-    NO* ponteiro = l->inicio;
-    if (!p) return;//Lista vazia
-    else if (p->prox == NULL) return;//Já é o último
+    if (p->prox == NULL) return;//Já é o último
 
-    if (ponteiro == p) 
-    {
-        l->inicio = p->prox;
-        l->inicio->ant = NULL;
-    }
+    //Tira o elemento "p" sem dar free
+    if (!(p->ant)) l->inicio = p->prox;
+    else p->ant->prox = p->prox;
+    p->prox->ant = p->ant;
 
-    else 
-    {
-        p->ant->prox = p->prox;
-        p->prox->ant = p->ant;
-    }
-
+    //Faz o "ponteiro" apontar para o elemento final da lista, 
+    //começando em p para economizar tempo
+    NO* ponteiro = p;
     while(ponteiro->prox)
     {
         ponteiro = ponteiro->prox;

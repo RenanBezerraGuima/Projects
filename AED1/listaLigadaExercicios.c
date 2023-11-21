@@ -67,9 +67,8 @@ bool inserir(lista* l, int ch){
 }
 
 void inverterLista(NO* *ini){
-    NO* ant;
+    NO* ant = NULL;
     NO* prox;
-    ant = NULL;
     NO* atual = *ini;
 
     while (atual)
@@ -81,6 +80,27 @@ void inverterLista(NO* *ini){
     }
     
     *ini = ant;
+}
+
+void exibirRecursiva(NO* p){
+    if (!p) return;
+    printf("%i ", p->chave);
+    exibirRecursiva(p->prox);
+}
+
+void exibirInversaRecursiva(NO* p){
+    if (!p) return;
+    exibirInversaRecursiva(p->prox);
+    printf("%i ", p->chave);
+}
+
+void inversaoRecursiva(NO* *ini, NO* atual, NO* ant){
+    if (atual) 
+    {
+        inversaoRecursiva(ini, atual->prox, atual);
+        atual->prox = ant;
+    }
+    else *ini = ant;
 }
 
 int main(){

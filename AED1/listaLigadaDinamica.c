@@ -135,27 +135,6 @@ NO* copia(NO* p){
     return (inicio);
 }
 
-void exibirRecursiva(NO* p){
-    if (!p) return;
-    printf("%i ", p->chave);
-    exibirRecursiva(p->prox);
-}
-
-void exibirInversaRecursiva(NO* p){
-    if (!p) return;
-    exibirInversaRecursiva(p->prox);
-    printf("%i ", p->chave);
-}
-
-void inversaoRecursiva(NO* *ini, NO* atual, NO* ant){
-    if (atual) 
-    {
-        inversaoRecursiva(ini, atual->prox, atual);
-        atual->prox = ant;
-    }
-    else *ini = ant;
-}
-
 int main () {
     lista l;
     inicializa(&l);
