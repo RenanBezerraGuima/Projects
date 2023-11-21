@@ -86,12 +86,8 @@ int main () {
     LISTA l;
     inicializar(&l);
     inserirElemListaOrd(10, &l);
-    // inserirElemListaOrd(20, &l);
-    // inserirElemListaOrd(30, &l);
-    exibir(&l);
-
-    NO* ant;
-    inserirAntes(30, buscaSeqOrd(10, l, &ant));
+    inserirElemListaOrd(20, &l);
+    inserirElemListaOrd(30, &l);
     exibir(&l);
 
     return 0;
