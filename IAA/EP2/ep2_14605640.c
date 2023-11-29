@@ -75,6 +75,17 @@ int maxAtualizacoes1(VETOR vetor[], int tamanho, int duracaoMax) {
     return numAtts;
 }
 
+void resposta1(int MaxAtts, VETOR vetorResp[], int tamanho)
+{
+    FILE *outputFile = fopen("saida1.txt", "w");
+
+    fprintf(outputFile, "%i", MaxAtts);
+    for(int i = 0; i < MaxAtts; i++) fprintf(outputFile, " %i", vetorResp[i].indice+1);
+    fprintf(outputFile,"\n");
+
+    fclose(outputFile);
+}
+
 int main(int argc, char *argv[]) {
     //argc me diz a quantidade de comandos que recebo pela linha de comando 
     //argv é um vetor com os argumentos com:
@@ -116,12 +127,7 @@ int main(int argc, char *argv[]) {
     switch (cenario)
     {
     case 1:
-        int attsMax = maxAtualizacoes1(atualizacoes, qtdAtts, duracao);
-        FILE *outputFile = fopen("saida1.txt", "w");
-        fprintf(outputFile, "%i", attsMax);
-        for(int i = 0; i < attsMax; i++) fprintf(outputFile, " %i", atualizacoes[i].indice+1);
-        fprintf(outputFile,"\n");
-        fclose(outputFile);
+        resposta1(maxAtualizacoes1(atualizacoes, qtdAtts, duracao),atualizacoes,qtdAtts);
         break;
     
     case 2:
