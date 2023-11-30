@@ -9,6 +9,13 @@ typedef struct {
     int indice;
 }VETOR;
 
+typedef struct{
+    char operacao;
+    int tempo;
+    int indice;
+    int duracao;
+}ALT;
+
 void countingSort(VETOR vetor[], int tamanho) {
   VETOR resposta[tamanho];//Vetor de resposta
 
@@ -116,28 +123,47 @@ int main(int argc, char *argv[]) {
 
     //Le as atts do arquivo de entrada,
     //cria um vetor e o ordena 
-    VETOR atualizacoes[qtdAtts];
+    VETOR atualizacoes[100];
     for(int i = 0; i < qtdAtts; i++)
     {
-        fscanf(fp, "%i", &atualizacoes[i].valor);
-        atualizacoes[i].indice = i;
+      fscanf(fp, "%i", &atualizacoes[i].valor);
+      atualizacoes[i].indice = i;
     }
-    countingSort(atualizacoes, qtdAtts);
 
     switch (cenario)
     {
     case 1:
+        countingSort(atualizacoes, qtdAtts);
         resposta1(maxAtualizacoes1(atualizacoes, qtdAtts, duracao),atualizacoes,qtdAtts);
         break;
     
     case 2:
-        /* code */
+        //Cria um vetor das alterações q devem acontecer
+        ALT alteracoes[100];
+        char caractere;
+        int i = 0;
+        while(1)
+        {
+          if (feof(fp)) 
+          {
+            i = i - 1;
+            break;
+          }
+          fscanf(fp, " %c", &alteracoes[i].operacao);
+          fscanf(fp, "%i", &alteracoes[i].tempo);
+          fscanf(fp, "%i", &alteracoes[i].indice);
+          fscanf(fp, "%i", &alteracoes[i].duracao);
+          i++;
+        }
+
         break;
 
     default:
         return -1;
         break;
     }
+
+    fclose(fp);
       
     return 0;
 }
