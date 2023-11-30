@@ -8,6 +8,11 @@ typedef struct estrutura{
     struct estrutura* dir;
 }NO;
 
+typedef struct estruct{
+    int chave;
+    struct estruct* prox;
+}NOL;
+
 //Arvore binária de Busca (Ordenada, esquera é menor que o atual e direita maior)
 NO* buscaABB(NO*p, int ch, NO**pai){
     *pai = NULL;
@@ -71,13 +76,107 @@ void busca(NO* p, NO** resp, int ch){
 }
 
 //Seja uma arvore com chaves repitidas, sem ordem, contar as ocorrências de ch, com limite de 50 elementos.
-
+void contarRepetidas(NO* p, int* qtd, int ch){
+    if (p && *qtd < 50)
+    {
+        if (p->chave == ch) *qtd++;
+        contarRepetidas(p->esq, qtd, ch);
+        contarRepetidas(p->dir, qtd, ch);
+    }
+}
 
 void exibir(NO* p){
     if(!p) return;
     exibir(p->esq);
     printf("%i ", p->chave);
     exibir(p->dir);
+}
+
+void listarOrdenado(NO* p, NOL** l){
+    if(p){
+        listarOrdenado(p->dir, l);
+
+        NOL* novo = (NOL*) malloc(sizeof(NOL));
+        novo->chave = p->chave;
+        if (!l) novo->prox = NULL;
+        else novo->prox = *l;
+        *l = novo;
+
+        listarOrdenado(p->esq, l);
+    }
+}
+
+//inicializar o pai como NULL
+NO* buscaABBRecursiva(NO*p, int ch, NO**pai){
+   if (!p) return NULL;
+   if (p->chave == ch) return p;
+   //Atualiza o pai
+   *pai = p;
+   
+   if (ch > p->chave) return buscaABBRecursiva(p->dir, ch, pai);
+   else return buscaABBRecursiva(p->esq, ch, pai);
+}
+
+// void excluirABB(NO* p, NO* pai){
+//     if(p)
+//     {
+//         if(pai)
+//         {
+//             if(!p->esq && !p->dir)//Caso 1
+//             {
+//                 if (pai->esq == p) pai->esq = NULL;
+//                 else pai->dir = NULL;
+//                 free(p);
+//             }
+//             else if (!p->esq || !p->dir)//Caso 2
+//             {
+//                 if (pai->esq == p)
+//                 {
+//                     if (p->esq) pai->esq = p->esq;
+//                     else pai->esq = p->dir;
+//                 }
+//                 else 
+//                 {
+//                     if (p->esq) pai->dir = p->esq;
+//                     else pai->dir = p->dir;
+//                 }
+//                 free(p);
+//             }
+//             else //Caso 3
+//             {
+
+//             }
+//         }
+
+//         else //Raiz não existe
+//         {
+//             if (!p->esq && !p->dir)
+//             {
+//                 free (p);
+//                 p = NULL;
+//             }
+//             if (!p->esq || !p->dir)
+//             {
+//                 NO* aux = p;
+//                 if (p->esq) p = p->esq;
+//                 else p = p->dir;
+//                 free(aux);
+//             }
+//         }
+//     }
+//     return p;
+// }
+
+void excluirABB(NO* p, NO* pai){
+    if (!p) return;
+    if (!pai)
+    {
+        free (p);
+        p = NULL;
+        return;
+    }
+
+    
 }
 
 int main (){
@@ -88,6 +187,11 @@ int main (){
     inserirABB(&raiz, 179);
     inserirABB(&raiz, 75);
     exibir(raiz);
+    printf("\n");
+
+    NO* pai = NULL;
+    printf("valor procurado %i\n", buscaABBRecursiva(raiz, 200, &pai)->chave);
+    printf("valor do pai %i\n", pai->chave);
 
     return 0;
 }
