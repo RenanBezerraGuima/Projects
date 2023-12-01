@@ -139,7 +139,7 @@ void excluirABB(NO* p, NO* pai){
 
     else if (p->esq && p->dir)//Caso 3
     {
-        NO* paiTemp = p;
+    NO* paiTemp = p;
         NO* temp = maior(p->esq, &paiTemp);
         p->chave = temp->chave;
         excluirABB(temp, paiTemp);
@@ -147,20 +147,6 @@ void excluirABB(NO* p, NO* pai){
 }
 
 int main (){
-    NO* raiz = NULL;
-    inserirABB(&raiz, 100);
-    inserirABB(&raiz, 200);
-    inserirABB(&raiz, 20);
-    inserirABB(&raiz, 179);
-    inserirABB(&raiz, 75);
-    inserirABB(&raiz, 220);
-    exibir(raiz);
-    printf("\n");
-
-    NO* pai = NULL;
-    NO* temp = buscaABBRecursiva(raiz,200, &pai);
-    excluirABB(temp, pai);
-    exibir(raiz);
 
     return 0;
 }
