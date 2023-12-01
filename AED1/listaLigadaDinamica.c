@@ -151,6 +151,17 @@ void destruirLista (lista* l) {
     l->inicio = NULL; // ajusta início da lista (vazia)
 }
 
+// Quantos elementos existem na lista
+int tamanhoLista(lista* l) {
+    NO* p = l->inicio;
+    int tam = 0;
+    while (p) {
+        tam++;
+        p = p->prox;
+    }
+    return(tam);
+}
+
 int main () {
     lista l;
     inicializa(&l);
@@ -164,6 +175,7 @@ int main () {
         printf("\t( 2) - Inserir ordenadamente um elemento na lista\n");
         printf("\t( 3) - Excluir um elemento da lista\n");
         printf("\t( 4) - Destruir a lista\n");
+        printf("\t( 5) - Contar numero de elementos da lista\n");
         scanf("%i", &input);
         switch (input)
         {
@@ -187,6 +199,10 @@ int main () {
         
         case 4:
             destruirLista(&l);
+            break;
+
+        case 5:
+            printf("Tamanho da lista: %i\n", tamanhoLista(&l));
             break;
 
         default:
