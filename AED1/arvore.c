@@ -13,6 +13,11 @@ typedef struct estruct{
     struct estruct* prox;
 }NOL;
 
+typedef struct{
+    NOL* inicio;
+    NOL* fim;
+}FILA;
+
 //Arvore binária de Busca (Ordenada, esquera é menor que o atual e direita maior)
 NO* buscaABB(NO*p, int ch, NO**pai){
     *pai = NULL;
@@ -117,56 +122,6 @@ NO* buscaABBRecursiva(NO*p, int ch, NO**pai){
    else return buscaABBRecursiva(p->esq, ch, pai);
 }
 
-// void excluirABB(NO* p, NO* pai){
-//     if(p)
-//     {
-//         if(pai)
-//         {
-//             if(!p->esq && !p->dir)//Caso 1
-//             {
-//                 if (pai->esq == p) pai->esq = NULL;
-//                 else pai->dir = NULL;
-//                 free(p);
-//             }
-//             else if (!p->esq || !p->dir)//Caso 2
-//             {
-//                 if (pai->esq == p)
-//                 {
-//                     if (p->esq) pai->esq = p->esq;
-//                     else pai->esq = p->dir;
-//                 }
-//                 else 
-//                 {
-//                     if (p->esq) pai->dir = p->esq;
-//                     else pai->dir = p->dir;
-//                 }
-//                 free(p);
-//             }
-//             else //Caso 3
-//             {
-
-//             }
-//         }
-
-//         else //Raiz não existe
-//         {
-//             if (!p->esq && !p->dir)
-//             {
-//                 free (p);
-//                 p = NULL;
-//             }
-//             if (!p->esq || !p->dir)
-//             {
-//                 NO* aux = p;
-//                 if (p->esq) p = p->esq;
-//                 else p = p->dir;
-//                 free(aux);
-//             }
-//         }
-//     }
-//     return p;
-// }
-
 void excluirABB(NO* p, NO* pai){
     if (!p) return;
     if (!pai)
@@ -179,19 +134,121 @@ void excluirABB(NO* p, NO* pai){
     
 }
 
+void inicializarFila(FILA* f) {
+    f->inicio = NULL;
+    f->fim = NULL;
+}
+
+void entrarFila(int ch, FILA* f) {
+    NOL* novo;
+    novo = (NOL*) malloc(sizeof(NOL));
+    novo->chave = ch;
+    novo->prox = NULL;
+    if(f->fim) f->fim->prox = novo;
+    else f->inicio = novo; 
+    f->fim = novo;
+}
+
+int sairFila(FILA* f)
+{
+    NOL* aux;
+    int ch;
+    if(!f->inicio) return(-1);
+    ch = f->inicio->chave;
+    aux = f->inicio;
+    f->inicio = f->inicio->prox;
+    free(aux);
+    if(!f->inicio) f->fim = NULL; // fila ficou vazia
+    return(ch);
+}
+
+int height(NO* node)
+{
+    if (node == NULL)
+        return 0;
+    else {
+         
+        // Compute the height of each subtree
+        int lheight = height(node->esq);
+        int rheight = height(node->dir);
+ 
+        // Use the larger one
+        if (lheight > rheight)
+            return (lheight + 1);
+        else
+            return (rheight + 1);
+    }
+}
+
+void printLevelOrder(NO* root)
+{
+    int h = height(root);
+    int i;
+    for (i = 1; i <= h; i++)
+        printCurrentLevel(root, i);
+}
+ 
+// Print nodes at a current level
+void printCurrentLevel(NO* root, int level)
+{
+    if (root == NULL)
+        return;
+    if (level == 1)
+        printf("%d ", root->chave);
+    else if (level > 1) {
+        printCurrentLevel(root->esq, level - 1);
+        printCurrentLevel(root->dir, level - 1);
+    }
+    printf("\n");
+}
+
+void exibirNivel(NO* raiz) {
+    FILA f;
+    NO* p = raiz;
+    inicializarFila(&f);
+    while( (p) || (f.inicio) ) {
+        if(p->esq) entrarFila(p->esq->chave, &f);
+        if(p->dir) entrarFila(p->dir->chave, &f);
+        printf("%d", p->chave);
+        p = NULL;
+        if(f.inicio) p->chave = sairFila(&f);
+    }
+}
+
 int main (){
     NO* raiz = NULL;
-    inserirABB(&raiz, 100);
-    inserirABB(&raiz, 200);
-    inserirABB(&raiz, 20);
-    inserirABB(&raiz, 179);
-    inserirABB(&raiz, 75);
-    exibir(raiz);
-    printf("\n");
+    int input;
+    int temp;
+    
 
-    NO* pai = NULL;
-    printf("valor procurado %i\n", buscaABBRecursiva(raiz, 200, &pai)->chave);
-    printf("valor do pai %i\n", pai->chave);
+    do
+    {
+        printf("\nPrograma de Arvore Binária de Busca\n\n");
+        printf("\t(-1) - Encerrar o programa\n");
+        printf("\t( 1) - Inserir elemento na arvore\n");
+        printf("\t( 2) - Excluir elemento na arvore\n");
+        printf("\t( 3) - Destruir a arvore\n");
+        printf("\t( 4) - Mostar altura da arvore\n");
+        printf("\t( 5) - Contar elementos da arvore\n");
+        scanf("%i", &input);
+        switch (input)
+        {
+        case 1:
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            inserirABB(&raiz, temp);
+            break;
+        
+        default:
+            if (input != -1)
+            {
+                printf("Comando ( %i) inválido\n", input);
+                return -1;
+            }
+            break;
+        }
+        printLevelOrder(raiz);
+    } while (input != -1);
 
     return 0;
 }
