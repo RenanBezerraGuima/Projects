@@ -122,16 +122,33 @@ NO* buscaABBRecursiva(NO*p, int ch, NO**pai){
    else return buscaABBRecursiva(p->esq, ch, pai);
 }
 
-void excluirABB(NO* p, NO* pai){
-    if (!p) return;
-    if (!pai)
+NO* maior(NO* p, NO** pai)
+{
+    NO* resp = p;
+    while (resp->dir)
     {
-        free (p);
-        p = NULL;
-        return;
+        *pai = resp; 
+        resp = resp->dir;
+    }
+    return resp;
+}
+
+void excluirABB(NO* p, NO* pai){
+    if (!p) return;//Não tem nó
+
+    if (!p->esq)//Caso 1 e 2
+    {
+        if(pai->esq == p) pai->esq = p->dir;
+        else pai->dir = p->dir;
     }
 
-    
+    else if (p->esq && p->dir)//Caso 3
+    {
+        NO* paiTemp = p;
+        NO* temp = maior(p->esq, &paiTemp);
+        p->chave = temp->chave;
+        excluirABB(temp, paiTemp);
+    }
 }
 
 void inicializarFila(FILA* f) {
