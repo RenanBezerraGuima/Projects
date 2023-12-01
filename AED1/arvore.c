@@ -117,66 +117,33 @@ NO* buscaABBRecursiva(NO*p, int ch, NO**pai){
    else return buscaABBRecursiva(p->esq, ch, pai);
 }
 
-// void excluirABB(NO* p, NO* pai){
-//     if(p)
-//     {
-//         if(pai)
-//         {
-//             if(!p->esq && !p->dir)//Caso 1
-//             {
-//                 if (pai->esq == p) pai->esq = NULL;
-//                 else pai->dir = NULL;
-//                 free(p);
-//             }
-//             else if (!p->esq || !p->dir)//Caso 2
-//             {
-//                 if (pai->esq == p)
-//                 {
-//                     if (p->esq) pai->esq = p->esq;
-//                     else pai->esq = p->dir;
-//                 }
-//                 else 
-//                 {
-//                     if (p->esq) pai->dir = p->esq;
-//                     else pai->dir = p->dir;
-//                 }
-//                 free(p);
-//             }
-//             else //Caso 3
-//             {
-
-//             }
-//         }
-
-//         else //Raiz não existe
-//         {
-//             if (!p->esq && !p->dir)
-//             {
-//                 free (p);
-//                 p = NULL;
-//             }
-//             if (!p->esq || !p->dir)
-//             {
-//                 NO* aux = p;
-//                 if (p->esq) p = p->esq;
-//                 else p = p->dir;
-//                 free(aux);
-//             }
-//         }
-//     }
-//     return p;
-// }
+NO* maior(NO* p, NO** pai)
+{
+    NO* resp = p;
+    while (resp->dir)
+    {
+        *pai = resp; 
+        resp = resp->dir;
+    }
+    return resp;
+}
 
 void excluirABB(NO* p, NO* pai){
-    if (!p) return;
-    if (!pai)
+    if (!p) return;//Não tem nó
+
+    if (!p->esq)//Caso 1 e 2
     {
-        free (p);
-        p = NULL;
-        return;
+        if(pai->esq == p) pai->esq = p->dir;
+        else pai->dir = p->dir;
     }
 
-    
+    else if (p->esq && p->dir)//Caso 3
+    {
+        NO* paiTemp = p;
+        NO* temp = maior(p->esq, &paiTemp);
+        p->chave = temp->chave;
+        excluirABB(temp, paiTemp);
+    }
 }
 
 int main (){
@@ -186,12 +153,14 @@ int main (){
     inserirABB(&raiz, 20);
     inserirABB(&raiz, 179);
     inserirABB(&raiz, 75);
+    inserirABB(&raiz, 220);
     exibir(raiz);
     printf("\n");
 
     NO* pai = NULL;
-    printf("valor procurado %i\n", buscaABBRecursiva(raiz, 200, &pai)->chave);
-    printf("valor do pai %i\n", pai->chave);
+    NO* temp = buscaABBRecursiva(raiz,200, &pai);
+    excluirABB(temp, pai);
+    exibir(raiz);
 
     return 0;
 }
