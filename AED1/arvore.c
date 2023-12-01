@@ -144,7 +144,7 @@ void excluirABB(NO* p, NO* pai){
 
     else if (p->esq && p->dir)//Caso 3
     {
-        NO* paiTemp = p;
+    NO* paiTemp = p;
         NO* temp = maior(p->esq, &paiTemp);
         p->chave = temp->chave;
         excluirABB(temp, paiTemp);
