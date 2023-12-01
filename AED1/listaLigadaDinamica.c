@@ -18,12 +18,15 @@ void inicializa(lista* l){
 
 void exibir (lista* l){
     NO* p = l->inicio;
+    printf("inicio\n");
+    printf("     \\ \n");
+    printf("       ");
     while (p) 
     {
-        printf("%i ", p->chave);
+        printf("%i -> ", p->chave);
         p = p->prox;
     }
-    printf("\n");
+    printf("NULL\n");
 }
 
 NO* busca(lista* l, int ch, NO* *ant){
@@ -135,17 +138,67 @@ NO* copia(NO* p){
     return (inicio);
 }
 
+// Destruição da lista
+void destruirLista (lista* l) {
+    NO* atual;
+    NO* prox;
+    atual = l->inicio;
+    while (atual) {
+    prox = atual->prox; // guarda próxima posição
+    free(atual); // libera memória apontada por atual
+    atual = prox;
+    }
+    l->inicio = NULL; // ajusta início da lista (vazia)
+}
+
 int main () {
     lista l;
     inicializa(&l);
-    inserirRepitidas(&l, 10);
-    inserirRepitidas(&l, 20);
-    inserirRepitidas(&l, 30);
-    inserirRepitidas(&l, 40);
-    exibirRecursiva(l.inicio);
-    printf("\n");
-    inversaoRecursiva(&l.inicio, l.inicio, NULL);
-    exibirRecursiva(l.inicio);
+    int input;
+    int temp;
+    do
+    {
+        printf("\nPrograma de Lista ligada Dinamica\n\n");
+        printf("\t(-1) - Encerrar o programa\n");
+        printf("\t( 1) - Inserir um elemento na lista\n");
+        printf("\t( 2) - Inserir ordenadamente um elemento na lista\n");
+        printf("\t( 3) - Excluir um elemento da lista\n");
+        printf("\t( 4) - Destruir a lista\n");
+        scanf("%i", &input);
+        switch (input)
+        {
+        case 1:
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            inserirRepitidas(&l, temp);
+            break;
+        
+        case 2:
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            inserir(&l, temp);
+            break;
+
+        case 3:
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            excluir(&l, temp);
+            break;
+        
+        case 4:
+            destruirLista(&l);
+            break;
+
+        default:
+            if (input != -1)
+            {
+                printf("Comando ( %i) inválido\n", input);
+                return -1;
+            }
+            break;
+        }
+        exibir(&l);
+    } while (input != -1);
 
     return 0;
 }
