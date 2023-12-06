@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Implementar estas mudanças no arquivo original do EP
-
 #define MAX_FILENAME 256 /* tamanho máximo de um nome de arquivo*/
 
 typedef struct {
@@ -213,17 +211,6 @@ int main(int argc, char *argv[]) {
         fscanf(fp, "%i", &alteracoes[i].indice);
         fscanf(fp, "%i", &alteracoes[i].duracao);
         i++;
-    }
-
-    exibirVetor(atualizacoes, qtdAtts);
-
-    for (int j = 0; j < i; j++)
-    {
-        printf("%c ", alteracoes[j].operacao);
-        printf("%i ", alteracoes[j].tempo);
-        printf("%i ", alteracoes[j].indice);
-        printf("%i", alteracoes[j].duracao);
-        printf("\n");
     }
 
     construirHeapMin(atualizacoes, qtdAtts);

@@ -104,7 +104,7 @@ void troca(VETOR* a, VETOR* b)
 
 // heapify uma subarvore rooted with node i which is an index in arr[].
 // N é tamanho do arranjo
-void heapify(VETOR* arr[], int N, int i)
+void heapify(VETOR arr[], int N, int i)
 {
 	// Acha o menor entre a raiz e
 	// os filhos esquerdo e direito
@@ -117,12 +117,12 @@ void heapify(VETOR* arr[], int N, int i)
 	int right = 2 * i + 2;
 
 	// Se o filho esquerdo é menor que o minimo atual
-	if (left < N && arr[left]->valor < arr[minimum]->valor)
+	if (left < N && (arr[left].valor < arr[minimum].valor || (arr[left].valor == arr[minimum].valor && arr[left].indice < arr[minimum].indice)))
 
 		minimum = left;
 
 	// Se o filho direito é menor que o minimo atual
-	if (right < N && arr[right]->valor < arr[minimum]->valor)
+	if (right < N && (arr[right].valor < arr[minimum].valor || (arr[right].valor == arr[minimum].valor && arr[right].indice < arr[minimum].indice)))
 
 		minimum = right;
 
@@ -131,7 +131,7 @@ void heapify(VETOR* arr[], int N, int i)
     // com o novo e faz o heapfiy novamente
 	if (minimum != i) {
 
-		troca(arr[i], arr[minimum]);
+		troca(&arr[i], &arr[minimum]);
 
 		// Recursively heapify the affected
 		// sub-tree
@@ -143,93 +143,80 @@ void heapify(VETOR* arr[], int N, int i)
 void construirHeapMin(VETOR arr[], int N)
 {
 	for (int i = N / 2 - 1; i >= 0; i--)
-		heapify(&arr, N, i);
+		heapify(arr, N, i);
 }
 
-void insercaoHeap(VETOR* arr[], int* N, int ch)
+void insercaoHeap(VETOR arr[], int* N, int ch)
 {
-	arr[*N]->valor = ch;
-  arr[*N]->indice = *N;
+	arr[*N].valor = ch;
+  arr[*N].indice = *N + 1;
 	
 	int i = *N;
 	//Enquanto o pai for maior que o filho
-	while (i>0 && arr[i/2]->valor > arr[i]->valor)
+	while (i>0 && arr[i/2].valor > arr[i].valor)
 	{
-		troca(arr[i], arr[i/2]);
+		troca(&arr[i], &arr[i/2]);
 		i = i/2;//Novo pai
 	}
 	*N = *N + 1;
 }
 
-VETOR* remocaoHeap(VETOR* arr[], int* N)
+void remocaoHeap(VETOR arr[], int* N, int* indice, int* valor)
 {
-	VETOR* resp = arr[0];
-	troca(arr[0], arr[*N - 1]);
+	*indice = arr[0].indice;
+  *valor = arr[0].valor;
+	troca(&arr[0], &arr[*N - 1]);
 	*N = *N - 1;
 	heapify(arr,*N, 0);
-
-	return resp;
 }
 
 //Recebe o vetor atualizacoes já como heap e o vetor de alterações
-void resposta2(VETOR atualizacoes[], int tamanhoAtt, ALT alteracoes[], int tamanhoAlt, int duracaototal)
-{
+void resposta2(VETOR atualizacoes[], int tamanhoAtt, ALT alteracoes[], int tamanhoAlt, int duracaototal){
   int tempo = 0; //Tempo atual inicializado
   int qtdAtts = 0; // Quantidade de atualizações que entrarão para a saida
-  VETOR* vetorResp[100];
+  VETOR vetorResp[100];
   int k = 0;
   while (tempo < duracaototal) //Enquanto tiver tempo 
   {
-    if (k < tamanhoAlt && tempo > alteracoes[k].tempo)// Se tiver alguma alteração para fazer
+    while (k < tamanhoAlt && tempo >= alteracoes[k].tempo)// Se tiver alguma alteração para fazer
     {
-      switch (alteracoes[k].operacao)
+        if (alteracoes[k].operacao == 'c') //Mudança
+        {
+            for (int j = 0; j < tamanhoAtt; j++)// Buscar no heap pelo indice
+            {
+                if ((atualizacoes[j].indice + 1) == alteracoes[k].indice)// Quando achar
+                {
+                    atualizacoes[j].valor = alteracoes[k].duracao;// Muda o valor 
+                    construirHeapMin(atualizacoes, tamanhoAtt); // Reconstrói o heap após a mudança
+                    break; // Sai do loop
+                }
+            }
+        }
+            
+        else if (alteracoes[k].operacao == 'i') //Inserção
+        {
+            insercaoHeap(atualizacoes, &tamanhoAtt, alteracoes[k].duracao);
+        }
+            
+        k++;
+    }
+      
+
+      if (atualizacoes[0].valor + tempo <= duracaototal)
       {
-        case 'c': //Mudança
-          for (int j = 0; j < tamanhoAtt; j++)// Buscar no heap pelo indice
-          {
-            if (atualizacoes[j].indice + 1 == alteracoes[k].indice)// Quando achar
-            {
-              atualizacoes[j].valor = alteracoes[k].duracao;// Muda o valor 
-            }
-
-            //Mudado ficou menor que o pai
-            if (atualizacoes[j].valor < atualizacoes[j/2].valor && j/2>0)
-            {
-              int w = j;
-              while (w>0 && atualizacoes[w].valor < atualizacoes[w/2].valor)
-              {
-                troca(&atualizacoes[w], &atualizacoes[w/2]);
-                w = w/2;//Novo pai
-              }
-            }
-
-            //Mudado ficou maior que o pai, verifica se o filhos estao corretos
-            else if (atualizacoes[j].valor > atualizacoes[j/2].valor && j/2>0)
-            {
-              heapify(&atualizacoes, tamanhoAtt, j);
-            }
-          }
-          break;
-        
-        case 'i'://Inserção
-          insercaoHeap(&atualizacoes, &tamanhoAtt, alteracoes[k].duracao);
-          break;
+        int indice;
+        int valor;  
+        remocaoHeap(atualizacoes, &tamanhoAtt, &indice, &valor);
+        vetorResp[qtdAtts].indice = indice;
+        vetorResp[qtdAtts].valor = valor;
+        tempo = tempo + vetorResp[qtdAtts].valor;
+        qtdAtts++;
       }
-      k++;
     }
 
-    if (atualizacoes[0].valor + tempo <= duracaototal)
-    {
-      vetorResp[qtdAtts] = remocaoHeap(&atualizacoes, &tamanhoAtt);
-      tempo = tempo + vetorResp[qtdAtts]->valor;
-      qtdAtts++;
-    }
-    break;
-  }  
-
-  //Faz o arquivo de saida2.txt e coloca as respostas nele
-  FILE *outputFile = fopen("saida2.txt", "w");
-  saida(qtdAtts, *vetorResp, outputFile);
+    //Faz o arquivo de saida2.txt e coloca as respostas nele
+    FILE *outputFile = fopen("saida2.txt", "w");
+    saida(qtdAtts, vetorResp, outputFile);
 }
 
 int main(int argc, char *argv[]) {
