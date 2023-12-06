@@ -82,15 +82,13 @@ int maxAtualizacoes1(VETOR vetor[], int tamanho, int duracaoMax) {
     return numAtts;
 }
 
-void resposta1(int MaxAtts, VETOR vetorResp[], int tamanho)
-{
-    FILE *outputFile = fopen("saida1.txt", "w");
+void saida(int MaxAtts, VETOR vetorResp[], FILE* outputFile){
 
-    fprintf(outputFile, "%i", MaxAtts);
-    for(int i = 0; i < MaxAtts; i++) fprintf(outputFile, " %i", vetorResp[i].indice+1);
-    fprintf(outputFile,"\n");
+  fprintf(outputFile, "%i", MaxAtts);
+  for(int i = 0; i < MaxAtts; i++) fprintf(outputFile, " %i", vetorResp[i].indice+1);
+  fprintf(outputFile,"\n");
 
-    fclose(outputFile);
+  fclose(outputFile);
 }
 
 // Troca dois valores
@@ -133,7 +131,7 @@ void heapify(VETOR* arr[], int N, int i)
     // com o novo e faz o heapfiy novamente
 	if (minimum != i) {
 
-		troca(&arr[i], &arr[minimum]);
+		troca(arr[i], arr[minimum]);
 
 		// Recursively heapify the affected
 		// sub-tree
@@ -142,10 +140,10 @@ void heapify(VETOR* arr[], int N, int i)
 }
 
 // Constroi o HeapMin do arranjo
-void construirHeapMin(VETOR* arr[], int N)
+void construirHeapMin(VETOR arr[], int N)
 {
 	for (int i = N / 2 - 1; i >= 0; i--)
-		heapify(arr, N, i);
+		heapify(&arr, N, i);
 }
 
 void insercaoHeap(VETOR* arr[], int* N, int ch)
@@ -157,7 +155,7 @@ void insercaoHeap(VETOR* arr[], int* N, int ch)
 	//Enquanto o pai for maior que o filho
 	while (i>0 && arr[i/2]->valor > arr[i]->valor)
 	{
-		troca(&arr[i], &arr[i/2]);
+		troca(arr[i], arr[i/2]);
 		i = i/2;//Novo pai
 	}
 	*N = *N + 1;
@@ -166,58 +164,72 @@ void insercaoHeap(VETOR* arr[], int* N, int ch)
 VETOR* remocaoHeap(VETOR* arr[], int* N)
 {
 	VETOR* resp = arr[0];
-	troca(&arr[0], &arr[*N - 1]);
+	troca(arr[0], arr[*N - 1]);
 	*N = *N - 1;
 	heapify(arr,*N, 0);
 
 	return resp;
 }
 
-//Recebe o vetor atualizacoes já como heap e o vetor de alterações.
-void resposta2(VETOR* atualizacoes[], int tamanhoAtt, ALT* alteracoes[], int tamanhoAlt, int duracaototal)
+//Recebe o vetor atualizacoes já como heap e o vetor de alterações
+void resposta2(VETOR atualizacoes[], int tamanhoAtt, ALT alteracoes[], int tamanhoAlt, int duracaototal)
 {
-  int tempo = 0;
-  int qtdAtts = 0;
+  int tempo = 0; //Tempo atual inicializado
+  int qtdAtts = 0; // Quantidade de atualizações que entrarão para a saida
   VETOR* vetorResp[100];
-  int i = 0;
-  while (tempo < duracaototal)
+  int k = 0;
+  while (tempo < duracaototal) //Enquanto tiver tempo 
   {
-    if (tempo > alteracoes[0]->tempo)
+    if (k < tamanhoAlt && tempo > alteracoes[k].tempo)// Se tiver alguma alteração para fazer
     {
-      switch (alteracoes[0]->operacao)
+      switch (alteracoes[k].operacao)
       {
-      case "c"://Mudança
-        for (int j = 0; j < tamanhoAtt; j++)
-        {
-          if (atualizacoes[j]->indice + 1 == alteracoes[0]->indice)
+        case 'c': //Mudança
+          for (int j = 0; j < tamanhoAtt; j++)// Buscar no heap pelo indice
           {
-            atualizacoes[j]->valor = alteracoes[0]->duracao;
+            if (atualizacoes[j].indice + 1 == alteracoes[k].indice)// Quando achar
+            {
+              atualizacoes[j].valor = alteracoes[k].duracao;// Muda o valor 
+            }
+
+            //Mudado ficou menor que o pai
+            if (atualizacoes[j].valor < atualizacoes[j/2].valor && j/2>0)
+            {
+              int w = j;
+              while (w>0 && atualizacoes[w].valor < atualizacoes[w/2].valor)
+              {
+                troca(&atualizacoes[w], &atualizacoes[w/2]);
+                w = w/2;//Novo pai
+              }
+            }
+
+            //Mudado ficou maior que o pai, verifica se o filhos estao corretos
+            else if (atualizacoes[j].valor > atualizacoes[j/2].valor && j/2>0)
+            {
+              heapify(&atualizacoes, tamanhoAtt, j);
+            }
           }
-        }
-        break;
-      
-      case "i"://Inserção
-        insercaoHeap(atualizacoes,tamanhoAtt,alteracoes[0]->duracao);
-        break;
+          break;
+        
+        case 'i'://Inserção
+          insercaoHeap(&atualizacoes, &tamanhoAtt, alteracoes[k].duracao);
+          break;
       }
+      k++;
     }
+
     if (atualizacoes[0].valor + tempo <= duracaototal)
     {
-      vetorResp[i] = remocaoHeap(atualizacoes, tamanhoAtt);
+      vetorResp[qtdAtts] = remocaoHeap(&atualizacoes, &tamanhoAtt);
+      tempo = tempo + vetorResp[qtdAtts]->valor;
       qtdAtts++;
-      tempo = tempo + vetorResp[i]->valor;
     }
     break;
   }  
 
   //Faz o arquivo de saida2.txt e coloca as respostas nele
   FILE *outputFile = fopen("saida2.txt", "w");
-
-  fprintf(outputFile, "%i", qtdAtts);
-  for(int i = 0; i < MaxAtts; i++) fprintf(outputFile, " %i", vetorResp[i].indice+1);
-  fprintf(outputFile,"\n");
-
-  fclose(outputFile);
+  saida(qtdAtts, *vetorResp, outputFile);
 }
 
 int main(int argc, char *argv[]) {
@@ -261,13 +273,13 @@ int main(int argc, char *argv[]) {
     {
     case 1:
         countingSort(atualizacoes, qtdAtts);
-        resposta1(maxAtualizacoes1(atualizacoes, qtdAtts, duracao),atualizacoes,qtdAtts);
+        FILE *outputFile = fopen("saida1.txt", "w");
+        saida(maxAtualizacoes1(atualizacoes, qtdAtts, duracao),atualizacoes, outputFile);
         break;
     
     case 2:
         //Cria um vetor das alterações q devem acontecer
         ALT alteracoes[100];
-        char caractere;
         int i = 0;
         while(1)
         {
@@ -282,8 +294,8 @@ int main(int argc, char *argv[]) {
           fscanf(fp, "%i", &alteracoes[i].duracao);
           i++;
         }
-        construirHeapMin(&atualizacoes, qtdAtts);
-        resposta2(&atualizacoes, qtdAtts, &alteracoes, i, duracao);
+        construirHeapMin(atualizacoes, qtdAtts);
+        resposta2(atualizacoes, qtdAtts, alteracoes, i, duracao);
         break;
 
     default:
