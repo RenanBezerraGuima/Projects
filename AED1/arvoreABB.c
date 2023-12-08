@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#define COUNT 10
+
 
 typedef struct estrutura{
     int chave;
@@ -40,65 +42,12 @@ bool inserirABB(NO** raiz, int ch){
     return true;
 }
 
-//Inicializar resp na main
-void contador(NO* p, int* resp){
-    if(p){
-        *resp = *resp + 1;
-        contador(p->esq, resp);
-        contador(p->dir, resp);
-    }
-}
-
-int max(int a, int b){
-    if (a > b) return a;
-    else return b;
-}
-
-//Altura da arvore
-int altura(NO*p){
-    if(!p) return 0;
-    if(!p->esq && !p->dir) return 1;//Desnessario, mas mas eficiente
-    return(1 + max(altura(p->esq), altura(p->dir)));
-}
-
-//Busca geral
-void busca(NO* p, NO** resp, int ch){
-    if(p){
-        if (p->chave == ch) *resp = p;
-        if(*resp == NULL) busca(p->esq, resp, ch);
-        if(*resp == NULL) busca(p->dir, resp, ch);
-    }
-}
-
-//Seja uma arvore com chaves repitidas, sem ordem, contar as ocorrências de ch, com limite de 50 elementos.
-void contarRepetidas(NO* p, int* qtd, int ch){
-    if (p && *qtd < 50)
-    {
-        if (p->chave == ch) *qtd++;
-        contarRepetidas(p->esq, qtd, ch);
-        contarRepetidas(p->dir, qtd, ch);
-    }
-}
 
 void exibir(NO* p){
     if(!p) return;
     exibir(p->esq);
     printf("%i ", p->chave);
     exibir(p->dir);
-}
-
-void listarOrdenado(NO* p, NOL** l){
-    if(p){
-        listarOrdenado(p->dir, l);
-
-        NOL* novo = (NOL*) malloc(sizeof(NOL));
-        novo->chave = p->chave;
-        if (!l) novo->prox = NULL;
-        else novo->prox = *l;
-        *l = novo;
-
-        listarOrdenado(p->esq, l);
-    }
 }
 
 //inicializar o pai como NULL
@@ -141,51 +90,42 @@ void excluirABB(NO* p, NO* pai){
     }
 }
 
-int height(NO* node)
+// EmOrdem inversa (direita - raiz - esquerda)
+void print2DUtil(NO* root, int space)
 {
-    if (node == NULL)
-        return 0;
-    else {
-         
-        // Compute the height of each subtree
-        int lheight = height(node->esq);
-        int rheight = height(node->dir);
- 
-        // Use the larger one
-        if (lheight > rheight)
-            return (lheight + 1);
-        else
-            return (rheight + 1);
-    }
-}
-
-void printLevelOrder(NO* root)
-{
-    int h = height(root);
-    int i;
-    for (i = 1; i <= h; i++)
-        printCurrentLevel(root, i);
-}
- 
-// Print nodes at a current level
-void printCurrentLevel(NO* root, int level)
-{
+    // Caso base
     if (root == NULL)
         return;
-    if (level == 1)
-        printf("%d ", root->chave);
-    else if (level > 1) {
-        printCurrentLevel(root->esq, level - 1);
-        printCurrentLevel(root->dir, level - 1);
-    }
+ 
+    // Aumenta a distancia entre niveis
+    space += COUNT;
+ 
+    // Começa pela direita
+    print2DUtil(root->dir, space);
+ 
+    // Print na raiz atual
+    // count
     printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->chave);
+ 
+    // Esquera da arvore
+    print2DUtil(root->esq, space);
 }
-
+ 
+// Função para o usuario
+void print2D(NO* root)
+{
+    printf("--------------------\n");
+    // Passa o contador inicial como 0
+    print2DUtil(root, 0);
+}
+ 
 int main (){
     NO* raiz = NULL;
     int input;
     int temp;
-    
 
     do
     {
@@ -196,6 +136,7 @@ int main (){
         printf("\t( 3) - Destruir a arvore\n");
         printf("\t( 4) - Mostar altura da arvore\n");
         printf("\t( 5) - Contar elementos da arvore\n");
+        printf("\t( 6) - Exibir arvore\n");
         scanf("%i", &input);
         switch (input)
         {
@@ -205,6 +146,22 @@ int main (){
             inserirABB(&raiz, temp);
             break;
         
+        case 2:
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            NO* pai;
+            NO* p = buscaABB(raiz, temp, &pai);
+            if (p) excluirABB(p, pai);
+            else printf("Elemento não encontrado\n");
+            break;
+
+        case 3:
+
+
+        case 6:
+            print2D(raiz);
+            break;
+
         default:
             if (input != -1)
             {
@@ -213,7 +170,7 @@ int main (){
             }
             break;
         }
-        printLevelOrder(raiz);
+        
     } while (input != -1);
 
     return 0;
