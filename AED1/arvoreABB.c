@@ -121,6 +121,17 @@ void print2D(NO* root)
     // Passa o contador inicial como 0
     print2DUtil(root, 0);
 }
+
+bool verificaABB(NO* p){
+    if (p)
+    {
+        if(p->esq && p->esq->chave > p->chave) return false;
+        if(p->dir && p->dir->chave < p->chave) return false;
+        if(!verificaABB(p->esq)) return false;
+        if(!verificaABB(p->dir)) return false;
+    }
+    return true;
+}
  
 int main (){
     NO* raiz = NULL;
@@ -160,6 +171,10 @@ int main (){
 
         case 6:
             print2D(raiz);
+            break;
+
+        case 7:
+            printf("%i",verificaABB(raiz));
             break;
 
         default:

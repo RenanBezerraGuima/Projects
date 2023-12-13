@@ -1,12 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
 
 typedef struct estrutura{
     int chave;
     struct estrutura* esq;
     struct estrutura* dir;
 }NO;
+
+typedef struct estruturaLista{
+    int chave;
+    struct estruturaLista* prox;
+}NOL;
 
 //Arvore binária de Busca (Ordenada, esquera é menor que o atual e direita maior)
 NO* buscaABB(NO*p, int ch, NO**pai){
@@ -74,7 +80,7 @@ void busca(NO* p, NO** resp, int ch){
 void contarRepetidas(NO* p, int* qtd, int ch){
     if (p && *qtd < 50)
     {
-        if (p->chave == ch) *qtd++;
+        if (p->chave == ch) *qtd = *qtd + 1;
         contarRepetidas(p->esq, qtd, ch);
         contarRepetidas(p->dir, qtd, ch);
     }
@@ -159,14 +165,6 @@ int height(NO* node)
     }
 }
 
-void printLevelOrder(NO* root)
-{
-    int h = height(root);
-    int i;
-    for (i = 1; i <= h; i++)
-        printCurrentLevel(root, i);
-}
- 
 // Print nodes at a current level
 void printCurrentLevel(NO* root, int level)
 {
@@ -181,40 +179,102 @@ void printCurrentLevel(NO* root, int level)
     printf("\n");
 }
 
+void printLevelOrder(NO* root)
+{
+    int h = height(root);
+    int i;
+    for (i = 1; i <= h; i++)
+        printCurrentLevel(root, i);
+}
+ 
+bool verificaABB(NO* p){
+    if (p)
+    {
+        if(p->esq && p->esq->chave > p->chave) return false;
+        if(p->dir && p->dir->chave < p->chave) return false;
+        if(!verificaABB(p->esq)) return false;
+        if(!verificaABB(p->dir)) return false;
+    }
+    return true;
+}
+
+bool verificaAssimetria(NO* p){
+    if (p)
+    {
+        if(p->esq && p->dir) return false;
+        if(!verificaAssimetria(p->esq)) return false;
+        if(!verificaAssimetria(p->dir)) return false;
+    }
+    return true;
+
+}
+
+bool verificaCheia(NO* p){
+    if (p)
+    {
+        if((p->esq && !p->dir) || (!p->esq && p->dir)) return false;
+        if(!verificaCheia(p->esq)) return false;
+        if(!verificaCheia(p->dir)) return false;
+    }
+    return true;
+}
+
+void listarMaiores(NO* p, int ch, NOL** l){
+    if(p){
+        if(p->chave > ch){
+            NOL* novo = (NOL*) malloc(sizeof(NOL));
+            novo->chave = p->chave;
+            if (!l) novo->prox = NULL;
+            else novo->prox = *l;
+            *l = novo;
+        }
+        listarMaiores(p->dir, ch, l);
+        listarMaiores(p->esq, ch, l);
+    }
+}
+
+void antecessorOrdemABB(NO* p, int ch, int* resp){
+   if (p)
+   {
+    if (p->chave < ch && p->chave > *resp) *resp = p->chave;
+    
+    if (ch > p->chave) antecessorOrdemABB(p->dir, ch, resp);//Se ch for maior procura na direita
+    else antecessorOrdemABB(p->esq, ch, resp);//Se ch for menor ou igual ao atual procura na esquerda
+   }
+}
+
 int main (){
     NO* raiz = NULL;
-    int input;
-    int temp;
-    
 
-    do
-    {
-        printf("\nPrograma de Arvore Binária de Busca\n\n");
-        printf("\t(-1) - Encerrar o programa\n");
-        printf("\t( 1) - Inserir elemento na arvore\n");
-        printf("\t( 2) - Excluir elemento na arvore\n");
-        printf("\t( 3) - Destruir a arvore\n");
-        printf("\t( 4) - Mostar altura da arvore\n");
-        printf("\t( 5) - Contar elementos da arvore\n");
-        scanf("%i", &input);
-        switch (input)
-        {
-        case 1:
-            printf("Insira a chave do elemento: ");
-            scanf("%i", &temp);
-            inserirABB(&raiz, temp);
-            break;
-        
-        default:
-            if (input != -1)
-            {
-                printf("Comando ( %i) inválido\n", input);
-                return -1;
-            }
-            break;
-        }
-        printLevelOrder(raiz);
-    } while (input != -1);
+    inserirABB(&raiz, 50);
+    inserirABB(&raiz, 40);
+    inserirABB(&raiz, 60);
+    inserirABB(&raiz, 20);
+    inserirABB(&raiz, 45);
+    inserirABB(&raiz, 55);
+    inserirABB(&raiz, 70);
+    
+    if(verificaABB(raiz)) printf("É ABB\n");
+    else printf("Não é ABB\n");
+
+    if(verificaAssimetria(raiz)) printf("É assimetrica\n");
+    else printf("Não é assimetrica\n");
+
+    if(verificaCheia(raiz)) printf("É cheia\n");
+    else printf("Não é cheia\n");
+
+    int resp = INT_MIN;
+    antecessorOrdemABB(raiz, 70, &resp);
+    printf("Antecessor: %i\n", resp);
+
+    NOL* l = NULL;
+    listarMaiores(raiz, 50, &l);
+    NOL* p = l;
+    while(p){
+        printf("%i ", p->chave);
+        p = p->prox;
+    }
+    printf("\n");
 
     return 0;
 }
