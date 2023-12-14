@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#define COUNT 10
 
 typedef struct estrutura{
     int chave;
@@ -219,6 +220,7 @@ bool verificaCheia(NO* p){
     return true;
 }
 
+// Dá pra melhorar
 void listarMaiores(NO* p, int ch, NOL** l){
     if(p){
         if(p->chave > ch){
@@ -243,16 +245,82 @@ void antecessorOrdemABB(NO* p, int ch, int* resp){
    }
 }
 
+// EmOrdem inversa (direita - raiz - esquerda)
+void print2DUtil(NO* root, int space)
+{
+    // Caso base
+    if (root == NULL)
+        return;
+ 
+    // Aumenta a distancia entre niveis
+    space += COUNT;
+ 
+    // Começa pela direita
+    print2DUtil(root->dir, space);
+ 
+    // Print na raiz atual
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->chave);
+ 
+    // Esquera da arvore
+    print2DUtil(root->esq, space);
+}
+ 
+// Função para o usuario
+void print2D(NO* root)
+{
+    printf("--------------------\n");
+    // Passa o contador inicial como 0
+    print2DUtil(root, 0);
+}
+
+//Essa função está com problema
+void encontrarPaiComum😢(NO* p, int ch, NO** pai, int* achou){
+    if (*achou == 1) return;
+    if(p)
+    {
+     if (p->chave == ch) 
+     {
+        *achou = 1;
+        return;
+     }
+     else (*pai) = p;
+     encontrarPaiComum😢(p->esq, ch, pai, achou);
+     encontrarPaiComum😢(p->dir, ch, pai, achou);
+    }
+}
+
+//resposta inicializada como NULL
+NO* encontrarPaiComum(NO* raiz, int ch){
+    NO* pai = NULL;
+    int achou = 0;
+    encontrarPaiComum😢(raiz, ch, &pai, &achou);
+    return pai;
+}
+
 int main (){
     NO* raiz = NULL;
+    NO* pai = NULL;
+    int temp;
 
-    inserirABB(&raiz, 50);
-    inserirABB(&raiz, 40);
-    inserirABB(&raiz, 60);
+    inserirABB(&raiz, 11);
+    inserirABB(&raiz, 10);
     inserirABB(&raiz, 20);
-    inserirABB(&raiz, 45);
-    inserirABB(&raiz, 55);
-    inserirABB(&raiz, 70);
+    inserirABB(&raiz, 15);
+    inserirABB(&raiz, 12);
+    inserirABB(&raiz, 5);
+    inserirABB(&raiz, 6);
+    inserirABB(&raiz, 2);
+    inserirABB(&raiz, 4);
+    inserirABB(&raiz, 3);
+    inserirABB(&raiz, 8);
+    inserirABB(&raiz, 9);
+    inserirABB(&raiz, 7);
+
+    print2D(raiz);
     
     if(verificaABB(raiz)) printf("É ABB\n");
     else printf("Não é ABB\n");
@@ -264,17 +332,28 @@ int main (){
     else printf("Não é cheia\n");
 
     int resp = INT_MIN;
-    antecessorOrdemABB(raiz, 70, &resp);
-    printf("Antecessor: %i\n", resp);
+    printf("Antecessor de: ");
+    scanf("%i", &temp);
+    antecessorOrdemABB(raiz, temp, &resp);
+    printf("eh %i\n", resp);
 
     NOL* l = NULL;
-    listarMaiores(raiz, 50, &l);
+    printf("Listando os maiores de ");
+    scanf("%i", &temp);
+    printf(" inicio");
+    listarMaiores(raiz, temp, &l);
     NOL* p = l;
     while(p){
-        printf("%i ", p->chave);
+        printf("-> %i", p->chave);
         p = p->prox;
     }
-    printf("\n");
+    printf("-> NULL\n");
+
+    printf("Encontrando o pai de: ");
+    scanf("%i", &temp);
+    pai = encontrarPaiComum(raiz, temp);
+    if (pai) printf("Pai eh %i", pai->chave);
+    else printf("Eh a raiz\n");
 
     return 0;
 }

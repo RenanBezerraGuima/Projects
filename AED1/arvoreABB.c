@@ -167,8 +167,14 @@ int main (){
             break;
 
         case 3:
-
-
+            printf("Insira a chave do elemento: ");
+            scanf("%i", &temp);
+            NO* paitemp = NULL;
+            paitemp = buscaABBRecursiva(raiz, temp, &pai);
+            if (paitemp) excluirABB(paitemp, pai);
+            else printf("Não existe essa chave\n");
+            break;
+            
         case 6:
             print2D(raiz);
             break;

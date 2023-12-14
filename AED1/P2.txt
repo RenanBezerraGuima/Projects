@@ -1,0 +1,31 @@
+Listas não lineares:
+    - Arvore Binária "comum" (sem desbalanceamento e ordenação)
+    - Arvore Busca Binária (ordenada e sem repetição)
+    - AVL (ABB com balançeamento)
+
+    - O que ele quer, testar se sabemos fazer algoritmos para resolver problema
+    - Algoritmos em geral recursivos
+
+    - Mesmo estilo da P1, 3 questões de algoritmos, exs que ele passou são parecidos com a prova
+
+    ->Habilidades
+        - Alogirtmos
+        - Percursos (Pre Ordem, Em ordem, Pós ordem e em Nivel)
+            **Em percurso em nivel, não precisa implementar fila
+        - Funções recursivas {
+            Percurso Simples (exibir)
+            Computar Algo (contar)
+            Percurso com condição de parada
+        }
+
+    - Em AVL, no máximo utilizar as funções já prontas (de rotação)
+
+    - Os algoritmos de condição de parada e que retorna são os mais dificeis e o
+    algoritmo de achar o antecessor ele disse que não pode dificultar muito mais q isso
+    **Exclusão ABB não cai
+
+**Em AED2 tudo é feito com listas não lineares**
+
+- Notas:
+    Posso refazer a função de exclusão ABB e implementar AVL para esse Fds ou sexta
+    
