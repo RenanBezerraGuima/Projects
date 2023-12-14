@@ -132,6 +132,46 @@ bool verificaABB(NO* p){
     }
     return true;
 }
+
+void percursoNivel(NO* raiz) {
+    if (raiz == NULL) 
+    {
+        return;
+    }
+
+    // Criação de uma fila para armazenar os nós
+    NO* fila[100];
+    int inicio = 0;
+    int fim = 0;
+    int nivelAtual = 1;
+    int proximoNivel = 0;
+
+    // Enfileira o nó raiz
+    fila[fim++] = raiz;
+
+    while (inicio < fim) {
+        // Desenfileira o nó atual e imprime seu valor
+        NO* atual = fila[inicio++];
+        printf("%d ", atual->chave);
+        nivelAtual--;
+
+        // Enfileira os nós filhos, se existirem
+        if (atual->esq != NULL) {
+            fila[fim++] = atual->esq;
+            proximoNivel++;
+        }
+        if (atual->dir != NULL) {
+            fila[fim++] = atual->dir;
+            proximoNivel++;
+        }
+
+        if (nivelAtual == 0) {
+            printf("\n");
+            nivelAtual = proximoNivel;
+            proximoNivel = 0;
+        }
+    }
+}
  
 int main (){
     NO* raiz = NULL;
@@ -147,7 +187,8 @@ int main (){
         printf("\t( 3) - Destruir a arvore\n");
         printf("\t( 4) - Mostar altura da arvore\n");
         printf("\t( 5) - Contar elementos da arvore\n");
-        printf("\t( 6) - Exibir arvore\n");
+        printf("\t( 6) - Exibir arvore Avançado\n");
+        printf("\t( 7) - Exibir arvore em nivel Simples\n");
         scanf("%i", &input);
         switch (input)
         {
@@ -174,7 +215,8 @@ int main (){
             break;
 
         case 7:
-            printf("%i",verificaABB(raiz));
+            printf("\n");
+            percursoNivel(raiz);
             break;
 
         default:
