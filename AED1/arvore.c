@@ -178,47 +178,7 @@ int sairFila(FILA* f)
     if(!f->inicio) f->fim = NULL; // fila ficou vazia
     return(ch);
 }
-
-int height(NO* node)
-{
-    if (node == NULL)
-        return 0;
-    else {
-         
-        // Compute the height of each subtree
-        int lheight = height(node->esq);
-        int rheight = height(node->dir);
  
-        // Use the larger one
-        if (lheight > rheight)
-            return (lheight + 1);
-        else
-            return (rheight + 1);
-    }
-}
-
-void printLevelOrder(NO* root)
-{
-    int h = height(root);
-    int i;
-    for (i = 1; i <= h; i++)
-        printCurrentLevel(root, i);
-}
- 
-// Print nodes at a current level
-void printCurrentLevel(NO* root, int level)
-{
-    if (root == NULL)
-        return;
-    if (level == 1)
-        printf("%d ", root->chave);
-    else if (level > 1) {
-        printCurrentLevel(root->esq, level - 1);
-        printCurrentLevel(root->dir, level - 1);
-    }
-    printf("\n");
-}
-
 void exibirNivel(NO* raiz) {
     FILA f;
     NO* p = raiz;
@@ -264,7 +224,7 @@ int main (){
             }
             break;
         }
-        printLevelOrder(raiz);
+        exibirNivel(raiz);
     } while (input != -1);
 
     return 0;
