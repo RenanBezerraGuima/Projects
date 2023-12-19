@@ -278,7 +278,7 @@ void print2D(NO* root)
 }
 
 //Essa função está com problema
-void encontrarPaiComum😢(NO* p, int ch, NO** pai, int* achou){
+void encontrarPaiComumInterno(NO* p, int ch, NO** pai, int* achou){
     if (*achou == 1) return;
     if(p)
     {
@@ -288,8 +288,8 @@ void encontrarPaiComum😢(NO* p, int ch, NO** pai, int* achou){
         return;
      }
      else (*pai) = p;
-     encontrarPaiComum😢(p->esq, ch, pai, achou);
-     encontrarPaiComum😢(p->dir, ch, pai, achou);
+     encontrarPaiComumInterno(p->esq, ch, pai, achou);
+     encontrarPaiComumInterno(p->dir, ch, pai, achou);
     }
 }
 
@@ -297,7 +297,7 @@ void encontrarPaiComum😢(NO* p, int ch, NO** pai, int* achou){
 NO* encontrarPaiComum(NO* raiz, int ch){
     NO* pai = NULL;
     int achou = 0;
-    encontrarPaiComum😢(raiz, ch, &pai, &achou);
+    encontrarPaiComumInterno(raiz, ch, &pai, &achou);
     return pai;
 }
 
@@ -322,38 +322,46 @@ int main (){
 
     print2D(raiz);
     
-    if(verificaABB(raiz)) printf("É ABB\n");
-    else printf("Não é ABB\n");
+    // if(verificaABB(raiz)) printf("É ABB\n");
+    // else printf("Não é ABB\n");
 
-    if(verificaAssimetria(raiz)) printf("É assimetrica\n");
-    else printf("Não é assimetrica\n");
+    // if(verificaAssimetria(raiz)) printf("É assimetrica\n");
+    // else printf("Não é assimetrica\n");
 
-    if(verificaCheia(raiz)) printf("É cheia\n");
-    else printf("Não é cheia\n");
+    // if(verificaCheia(raiz)) printf("É cheia\n");
+    // else printf("Não é cheia\n");
 
-    int resp = INT_MIN;
-    printf("Antecessor de: ");
-    scanf("%i", &temp);
-    antecessorOrdemABB(raiz, temp, &resp);
-    printf("eh %i\n", resp);
+    // int resp = INT_MIN;
+    // printf("Antecessor de: ");
+    // scanf("%i", &temp);
+    // antecessorOrdemABB(raiz, temp, &resp);
+    // printf("eh %i\n", resp);
 
-    NOL* l = NULL;
-    printf("Listando os maiores de ");
-    scanf("%i", &temp);
-    printf(" inicio");
-    listarMaiores(raiz, temp, &l);
-    NOL* p = l;
-    while(p){
-        printf("-> %i", p->chave);
-        p = p->prox;
+    // NOL* l = NULL;
+    // printf("Listando os maiores de ");
+    // scanf("%i", &temp);
+    // printf(" inicio");
+    // listarMaiores(raiz, temp, &l);
+    // NOL* p = l;
+    // while(p){
+    //     printf("-> %i", p->chave);
+    //     p = p->prox;
+    // }
+    // printf("-> NULL\n");
+
+    // printf("Encontrando o pai de: ");
+    // scanf("%i", &temp);
+    // pai = encontrarPaiComum(raiz, temp);
+    // if (pai) printf("Pai eh %i", pai->chave);
+    // else printf("Eh a raiz\n");
+
+    NOL* lista = NULL;
+    listarOrdenado(raiz, &lista);
+    NOL* ponteiro = lista;
+    while(ponteiro){
+        printf("-> %i", ponteiro->chave);
+        ponteiro = ponteiro->prox;
     }
-    printf("-> NULL\n");
-
-    printf("Encontrando o pai de: ");
-    scanf("%i", &temp);
-    pai = encontrarPaiComum(raiz, temp);
-    if (pai) printf("Pai eh %i", pai->chave);
-    else printf("Eh a raiz\n");
 
     return 0;
 }
