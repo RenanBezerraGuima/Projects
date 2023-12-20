@@ -367,6 +367,59 @@ void excluirFilhosComunas(NO* p){
     }
 }
 
+void exibirNivel(NO* raiz){
+    if (!raiz) return;
+
+    FILA* inicio = NULL;
+    FILA* fim = NULL;
+    enfileirar(&inicio, &fim, raiz);
+
+    while (inicio) 
+    {
+        int tamNivel = tamanhoFila(inicio);
+
+        for(int i = 0; i < tamNivel; i++)
+        {
+            NO* no = desenfileirar(&inicio);
+            printf("%i ", no->chave);
+            if (no->esq)
+                enfileirar(&inicio, &fim, no->esq);
+            if (no->dir)
+                enfileirar(&inicio, &fim, no->dir);
+        }   
+        printf("\n");    
+    }
+}
+
+NO* buscaABBInterna(NO* p, int ch, NO** pai, bool* achou){
+	if(p)
+	{
+		if(p->chave == ch)
+		{
+			*achou = true;
+			return p;
+		}
+		else if (!*achou) 
+		{
+			*pai = p;
+            NO* temp;
+            if (ch > p->chave)
+                temp = buscaABBInterna(p->dir, ch, pai, achou);
+            else 
+                temp = buscaABBInterna(p->esq, ch, pai, achou);
+			if(achou) return temp;
+		}
+	}
+    return NULL; 
+}
+
+NO* buscaABBRecursiva(NO* raiz, int ch, NO** pai){
+	bool achou = false;
+	if(!raiz) return NULL;
+    
+	return (buscaABBInterna(raiz, ch, pai, &achou));
+}
+
 int main (){
     NO* raiz = NULL;
     
@@ -384,10 +437,13 @@ int main (){
     inserirABB(&raiz, 9);
     inserirABB(&raiz, 7);
 
-    print2D(raiz);
+    int temp;
+    printf("Insira uma chave: ");
+    scanf("%i", &temp);
+    NO* pai = NULL;
+    NO* noTemp = buscaABBRecursiva(raiz, temp, &pai);
+    if (!pai) printf("Nao existe o pai\n");
+    else printf("A pai de %i eh %i", temp, pai->chave); 
 
-    excluirFilhosComunas(raiz);
-    print2D(raiz);
-    
     return 0;
 }
