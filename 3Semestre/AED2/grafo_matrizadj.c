@@ -34,3 +34,16 @@ bool inicializaGrafo(Grafo *grafo, int nv)
     }
     return true;
 }
+
+bool imprimeGrafo(Grafo *grafo)
+{
+    int i, j;
+    for (i = 0; i < grafo->numVertices; i++)
+    {
+        for (j = 0; j < grafo->numVertices; j++)
+        {
+            printf("%d ", grafo->mat[i][j]);
+        }
+        printf("\n");
+    }
+}
