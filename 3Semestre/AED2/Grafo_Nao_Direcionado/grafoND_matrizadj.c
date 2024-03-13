@@ -1,12 +1,6 @@
 #include <stdio.h>
-#include "grafo_matrizadj.h"
+#include "grafoND_matrizadj.h"
 
-/*
-    InicializaGrafo(Grafo* grafo, int nv): Inicializa um grafo com nv vertices
-    Vertices vao de 1 a nv
-    Preenche as celulas com AN (representando ausencia de aresta)
-    Retorna true se inicializou com sucesso e false caso contrario
-*/
 bool inicializaGrafo(Grafo *grafo, int nv)
 {
     int i, j;
@@ -52,9 +46,15 @@ bool verificaValidadeVertice(int v, Grafo *grafo)
 
 void insereAresta(int v1, int v2, Peso peso, Grafo *grafo)
 {
+    if (v1 == v2)
+    {
+        fprintf(stderr, "ERRO: Self loop em grafo não direcionado nao e permitido.\n");
+        return;
+    }
     if (!(verificaValidadeVertice(v1, grafo) && verificaValidadeVertice(v2, grafo)))
         return;
     grafo->mat[v1][v2] = peso;
+    grafo->mat[v2][v1] = peso;
     grafo->numArestas++;
 }
 
@@ -84,6 +84,7 @@ bool removeAresta(int v1, int v2, Peso *peso, Grafo *grafo)
     {
         *peso = grafo->mat[v1][v2];
         grafo->mat[v1][v2] = AN;
+        grafo->mat[v2][v1] = AN;
         grafo->numArestas--;
         return true;
     }
@@ -103,7 +104,7 @@ bool listaAdjVazia(int v, Grafo *grafo)
     return true;
 }
 
-Apontador proxListaAdj(int v, Grafo *grafo, Apontador atual)
+int proxListaAdj(int v, Grafo *grafo, int atual)
 {
     if (!verificaValidadeVertice(v, grafo))
         return VERTICE_INVALIDO;
@@ -114,11 +115,6 @@ Apontador proxListaAdj(int v, Grafo *grafo, Apontador atual)
     if (atual >= grafo->numVertices)
         return VERTICE_INVALIDO;
     return atual;
-}
-
-Apontador primeiroListaAdj(int v, Grafo *grafo)
-{
-    return (proxListaAdj(v, grafo, -1));
 }
 
 void liberaGrafo(Grafo *grafo) {}
