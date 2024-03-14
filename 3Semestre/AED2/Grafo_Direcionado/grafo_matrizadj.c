@@ -103,7 +103,7 @@ bool listaAdjVazia(int v, Grafo *grafo)
     return true;
 }
 
-int proxListaAdj(int v, Grafo *grafo, int atual)
+Apontador proxListaAdj(int v, Grafo *grafo, Apontador atual)
 {
     if (!verificaValidadeVertice(v, grafo))
         return VERTICE_INVALIDO;
@@ -114,6 +114,11 @@ int proxListaAdj(int v, Grafo *grafo, int atual)
     if (atual >= grafo->numVertices)
         return VERTICE_INVALIDO;
     return atual;
+}
+
+Apontador primeiroListaAdj(int v, Grafo *grafo)
+{
+    return (proxListaAdj(v, grafo, -1));
 }
 
 void liberaGrafo(Grafo *grafo) {}
