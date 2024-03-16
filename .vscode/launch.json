@@ -2,6 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "helloWorld",
+      "request": "launch",
+      "mainClass": "helloWorld",
+      "projectName": "Projects_f2d036a0"
+    },
+    {
+      "type": "java",
+      "name": "<unnamed_class$helloWorld>",
+      "request": "launch",
+      "mainClass": "<unnamed_class$helloWorld>",
+      "projectName": "Projects_f2d036a0"
+    },
+    {
       "type": "lldb",
       "request": "launch",
       "name": "Debug",
