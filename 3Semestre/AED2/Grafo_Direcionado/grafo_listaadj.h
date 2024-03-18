@@ -3,7 +3,7 @@
 #define VERTICE_INVALIDO NULL // vertice invalido ou ausente
 #define AN -1                 // aresta nula
 
-typedef int Peso;
+typedef float Peso;
 
 /*
     Tipo estrutura Aresta:
@@ -40,19 +40,17 @@ typedef struct
 } Grafo;
 
 bool inicializaGrafo(Grafo *grafo, int nv);
-
+int obtemNrVertices(Grafo *grafo);
+int obtemNrArestas(Grafo *grafo);
 bool verificaValidadeVertice(int v, Grafo *grafo);
-
-bool listaAdjVazia(int v, Grafo *grafo);
-
-Apontador proxListaAdj(int v, Grafo *grafo, Apontador atual);
-
-Apontador primeiroListaAdj(int v, Grafo *grafo);
-
-bool existeAresta(int v1, int v2, Grafo *grafo);
-
-Peso obtemPesoAresta(int v1, int v2, Grafo *grafo);
-
 void insereAresta(int v1, int v2, Peso peso, Grafo *grafo);
-
+bool existeAresta(int v1, int v2, Grafo *grafo);
+Peso obtemPesoAresta(int v1, int v2, Grafo *grafo);
 bool removeArestaObtendoPeso(int v1, int v2, Peso *peso, Grafo *grafo);
+bool removeAresta(int v1, int v2, Grafo *grafo);
+bool listaAdjVazia(int v, Grafo *grafo);
+Apontador primeiroListaAdj(int v, Grafo *grafo);
+Apontador proxListaAdj(int v, Grafo *grafo, Apontador atual);
+void imprimeGrafo(Grafo *grafo);
+void liberaGrafo(Grafo *grafo);
+int leGrafo(char *nomearq, Grafo *grafo);

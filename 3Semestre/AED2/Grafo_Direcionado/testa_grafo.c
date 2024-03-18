@@ -1,30 +1,52 @@
-// #include "grafo_matrizadj.h"
-#include "grafo_listaadj.h"
+#include "grafo_matrizadj.h"
+// #include "grafo_listaadj.h"
 #include <stdio.h>
 
 int main()
 {
     Grafo g1;
-    int numVertices;
 
-    do
-    {
-        printf("Digite o numero de vertices do grafo: ");
-        scanf("%d", &numVertices);
-    } while (!inicializaGrafo(&g1, numVertices));
+    // int numVertices;
+    //  do
+    //  {
+    //      printf("Digite o numero de vertices do grafo: ");
+    //      scanf("%d", &numVertices);
+    //  } while (!inicializaGrafo(&g1, numVertices));
 
-    insereAresta(2, 5, 98, &g1);
-    printf("Inseri uma aresta (2,5) com peso 98.\n");
-    printf("Inseri uma aresta (2,3) com peso 28.\n");
-    printf("A aresta (2,5) existe? %d.\n", existeAresta(2, 5, &g1));
-    printf("O peso da aresta (2,5) eh %d.\n", obtemPesoAresta(2, 5, &g1));
-    printf("A lista adj de 2 eh vazia? %d.\n", listaAdjVazia(2, &g1));
-    printf("A lista adj de 5 eh vazia? %d.\n", listaAdjVazia(5, &g1));
-    printf("O primeiro da lista adj de 2 vai para %d.\n", primeiroListaAdj(2, &g1)->vdest);
-    Peso peso;
-    printf("Remove aresta (2,5) deu certo? %d, se sim ela tinha peso %d.\n", removeArestaObtendoPeso(2, 5, &peso, &g1), peso);
-    // printf("A primeira aresta da lista de adjacencia eh %d.\n", primeiroListaAdj(2, &g1)->vdest);
+    // inicializaGrafo(&g1, 10);
 
-    // printf("Existe a aresta (%d, %d) ? %d", 2, 5, existeAresta(2, 5, &g1));
+    // insereAresta(0, 9, 29, &g1);
+    // insereAresta(9, 0, 20, &g1);
+    // insereAresta(0, 8, 26, &g1);
+    // insereAresta(5, 5, 25, &g1);
+    // insereAresta(5, 6, 285, &g1);
+    // insereAresta(7, 3, 22, &g1);
+    // insereAresta(1, 9, 21, &g1);
+    // insereAresta(3, 7, 28, &g1);
+    // insereAresta(2, 8, 27, &g1);
+    // imprimeGrafo(&g1);
+
+    // printf("Existe a aresta (0,9)? %d\n", existeAresta(0, 9, &g1));
+    // printf("Numero de Arestas %d\n", obtemNrArestas(&g1));
+    // printf("Numero de Vertices %d\n", obtemNrVertices(&g1));
+    // printf("Peso da Aresta (0,9) %.1f\n", obtemPesoAresta(0, 9, &g1));
+
+    // Peso peso;
+    // removeArestaObtendoPeso(0, 9, &peso, &g1);
+    // printf("Removendo Aresta (0,9) que tinha peso %.1f\n", peso);
+    // printf("Removendo Aresta (7,3)\n");
+    // removeAresta(7, 3, &g1);
+    // imprimeGrafo(&g1);
+    // printf("O vertice 4 tem uma listaAdj vazia? %d\n", listaAdjVazia(4, &g1));
+    // printf("O vertice 2 tem uma listaAdj vazia? %d\n", listaAdjVazia(2, &g1));
+
+    // Apontador primeiro = primeiroListaAdj(5, &g1);
+    // Apontador proximo = proxListaAdj(5, &g1, primeiro);
+    // printf("O primeiro da listaADj do 5 eh (5,%d)\n", primeiro->vdest);
+    // printf("O proximo da listaADj do 5 eh (5,%d)\n", proximo->vdest);
+
+    printf("%d\n", leGrafo("entrada.txt", &g1));
+    imprimeGrafo(&g1);
+
     return 0;
 }
