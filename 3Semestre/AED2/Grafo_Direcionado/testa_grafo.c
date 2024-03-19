@@ -1,5 +1,5 @@
-#include "grafo_matrizadj.h"
-// #include "grafo_listaadj.h"
+// #include "grafo_matrizadj.h"
+#include "grafo_listaadj.h"
 #include <stdio.h>
 
 int main()
