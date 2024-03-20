@@ -57,6 +57,17 @@ int obtemNrArestas(Grafo *grafo)
     return grafo->numArestas;
 }
 
+int obtemDestino(Grafo *grafo, Apontador vertice)
+{
+    if (vertice == NULL)
+    {
+        fprintf(stderr, "ERRO na obtemDestino, vertice invalido.\n");
+        return -1;
+    }
+
+    return vertice->vdest;
+}
+
 bool verificaValidadeVertice(int v, Grafo *grafo)
 {
     if (v >= grafo->numVertices)

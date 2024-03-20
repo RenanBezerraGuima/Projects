@@ -57,6 +57,17 @@ int obtemNrArestas(Grafo *grafo)
     return grafo->numArestas;
 }
 
+int obtemDestino(Grafo *grafo, Apontador vertice)
+{
+    if (vertice == NULL)
+    {
+        fprintf(stderr, "ERRO na obtemDestino, vertice invalido.\n");
+        return -1;
+    }
+
+    return vertice->vdest;
+}
+
 bool verificaValidadeVertice(int v, Grafo *grafo)
 {
     if (v >= grafo->numVertices)
@@ -210,6 +221,11 @@ bool listaAdjVazia(int v, Grafo *grafo)
 
 Apontador primeiroListaAdj(int v, Grafo *grafo)
 {
+    if (!verificaValidadeVertice(v, grafo))
+    {
+        fprintf(stderr, "ERRO na primeiroListaAdj, vertice invalido.\n");
+        return VERTICE_INVALIDO;
+    }
     return (grafo->listaAdj[v]);
 }
 

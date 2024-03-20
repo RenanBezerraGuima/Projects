@@ -19,13 +19,14 @@ int main()
     inicializaGrafo(&g1, 10);
 
     insereAresta(0, 9, 29, &g1);
-    insereAresta(9, 0, 20, &g1);
     insereAresta(0, 8, 26, &g1);
+    insereAresta(1, 9, 21, &g1);
+    insereAresta(2, 8, 27, &g1);
+    insereAresta(3, 4, 28, &g1);
     insereAresta(5, 6, 285, &g1);
     insereAresta(7, 3, 22, &g1);
-    insereAresta(1, 9, 21, &g1);
-    insereAresta(3, 7, 28, &g1);
-    insereAresta(2, 8, 27, &g1);
+    insereAresta(9, 4, 20, &g1);
+
     imprimeGrafo(&g1);
 
     printf("Existe a aresta (0,9)? %d\n", existeAresta(0, 9, &g1));
@@ -34,18 +35,18 @@ int main()
     printf("Peso da Aresta (0,9) %.1f\n", obtemPesoAresta(0, 9, &g1));
 
     Peso peso;
-    removeArestaObtendoPeso(0, 9, &peso, &g1);
-    printf("Removendo Aresta (0,9) que tinha peso %.1f\n", peso);
+    removeArestaObtendoPeso(1, 9, &peso, &g1);
+    printf("Removendo Aresta (1,9) que tinha peso %.1f\n", peso);
     printf("Removendo Aresta (7,3)\n");
     removeAresta(7, 3, &g1);
     imprimeGrafo(&g1);
     printf("O vertice 4 tem uma listaAdj vazia? %d\n", listaAdjVazia(4, &g1));
-    printf("O vertice 2 tem uma listaAdj vazia? %d\n", listaAdjVazia(2, &g1));
+    printf("O vertice 9 tem uma listaAdj vazia? %d\n", listaAdjVazia(9, &g1));
 
-    Apontador primeiro = primeiroListaAdj(5, &g1);
-    Apontador proximo = proxListaAdj(5, &g1, primeiro);
-    printf("O primeiro da listaADj do 9 eh (9,%d)\n", primeiro->vdest);
-    printf("O proximo da listaADj do 9 eh (9,%d)\n", proximo->vdest);
+    Apontador primeiro = primeiroListaAdj(0, &g1);
+    Apontador proximo = proxListaAdj(0, &g1, primeiro);
+    printf("O primeiro da listaADj do 0 eh (0,%d)\n", obtemDestino(&g1, primeiro));
+    printf("O proximo da listaADj do 0 eh (0,%d)\n", obtemDestino(&g1, proximo));
 
     return 0;
 }

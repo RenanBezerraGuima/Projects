@@ -42,6 +42,7 @@ typedef struct
 bool inicializaGrafo(Grafo *grafo, int nv);
 int obtemNrVertices(Grafo *grafo);
 int obtemNrArestas(Grafo *grafo);
+int obtemDestino(Grafo *grafo, Apontador vertice);
 bool verificaValidadeVertice(int v, Grafo *grafo);
 void insereAresta(int v1, int v2, Peso peso, Grafo *grafo);
 bool existeAresta(int v1, int v2, Grafo *grafo);
